@@ -1,18 +1,44 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, View, ScrollView , Text, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import Button from '../assets/components/button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api from '../assets/api/axios';
 
 function Cadastrar({ navigation }) {
+  const CADASTRO_URL = '/users/registrar';
+
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [contato, setContato] = useState('');
   const celRef = useRef(null);
 
-  const login = () => {
+  const Registrar = async () => {
     const contatoNoMask = celRef?.current.getRawValue();
-    alert(contatoNoMask)
+    const data = {
+      nome: nome,
+      email: email,
+      senha: senha,
+      contato: contatoNoMask
+    }
+    try {
+      const response = await api.post(CADASTRO_URL,JSON.stringify(data),
+        {
+          headers: {'Content-Type':'application/json'},
+          withCredentials: true
+        });
+        if(response.data.success === true) {
+          await AsyncStorage.setItem('token', response.data.result)
+          alert(response.data.message)
+        } else if(response?.data.success === false) {
+          alert(response.data.message)
+        } else {
+          alert(response.data.message)
+        }
+    } catch (err) {
+        alert(err.message)
+    }
   }
 
   return (
@@ -23,7 +49,7 @@ function Cadastrar({ navigation }) {
         <TextInput placeholder='E-Mail' style={styles.inputText} value={email} onChangeText={setEmail}/>
         <TextInput placeholder='Senha' style={styles.inputText} value={senha} onChangeText={setSenha} secureTextEntry/>
         <TextInputMask placeholder='Celular' style={styles.inputContato} type={'cel-phone'} value={contato} ref={celRef} onChangeText={setContato}/>
-        <Button title='Criar conta' onpress={login} style={{ width: '100%' }}/>
+        <Button title='Criar conta' onpress={Registrar} style={{ width: '100%' }}/>
         <Button title='Já possui conta? Faça login' onpress={() => navigation.goBack()} type='tertiary'/>
       </View>
     </View>

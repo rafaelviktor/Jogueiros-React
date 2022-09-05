@@ -1,17 +1,40 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView , Text, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
+import api from '../assets/api/axios';
 
 function Perfil({ navigation }) {
+  const LOGIN_URL = '/users/entrar';
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
-  const login = () => {
-    alert(email+' '+senha)
-  }
+  useEffect(() => {
+   const accessToken = AsyncStorage.getItem('token');
+  },[])
 
-  const esqueceusenha = () => {
-    alert(email+' '+senha)
+  const Entrar = async () => {
+    const data = {
+      email: email,
+      senha: senha
+    }
+    try {
+      const response = await api.post(LOGIN_URL,JSON.stringify(data),
+        {
+          headers: {'Content-Type':'application/json'},
+          withCredentials: true
+        });
+        if(response.data.success === true) {
+          await AsyncStorage.setItem('token', response.data.result)
+          alert(response.data.message)
+        } else if(response?.data.success === false) {
+          alert(response.data.message)
+        } else {
+          alert(response.data.message)
+        }
+    } catch (err) {
+        alert(err.message)
+    }
   }
 
   return (
@@ -21,7 +44,7 @@ function Perfil({ navigation }) {
       <View style={styles.container}>
         <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
         <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
-        <Button title='Entrar' onpress={login} style={{ width: '90%' }}/>
+        <Button title='Entrar' onpress={Entrar} style={{ width: '90%' }}/>
         <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
       </View>
     </View>
