@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionic from 'react-native-vector-icons/Ionicons'
 
 import Home from '../views/home';
-import Perfil from '../views/perfil';
+import LoginPerfil from '../views/loginPerfil';
 import Populares from '../views/populares';
 
 const Tab = createBottomTabNavigator();
@@ -13,6 +13,7 @@ const Tabs = () => {
         <Tab.Navigator
             screenOptions={({route}) => ({
                 headerShown: false,
+                tabBarActiveTintColor: '#1a9946',
                 tabBarStyle: { paddingBottom: 10,height: 70, padding: 10 },
                 tabBarIcon: ({focused, size, color}) => {
                     let iconName;
@@ -29,14 +30,10 @@ const Tabs = () => {
                     }
                     return <Ionic name={iconName} size={size} color={iconColor}/>
                 },
-            })}
-            tabBarOptions={{
-                activeTintColor: '#1a9946',
-                inactiveTintColor: '#828282'
-            }}>
+            })}>
             <Tab.Screen name="Explorar" component={Home} />
             <Tab.Screen name="Populares" component={Populares} />
-            <Tab.Screen name="Perfil" component={Perfil} />
+            <Tab.Screen name="Perfil" component={LoginPerfil} />
         </Tab.Navigator>
     );
 }

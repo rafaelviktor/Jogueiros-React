@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView , Text, TextInput } from 'react-native';
 import Button from '../assets/components/button';
 
-function Perfil() {
+function Perfil({ navigation }) {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
 
@@ -22,7 +22,7 @@ function Perfil() {
         <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
         <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
         <Button title='Entrar' onpress={login} style={{ width: '90%' }}/>
-        <Button title='Não possui conta? Cadastre-se' onpress={esqueceusenha} type='tertiary'/>
+        <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
       </View>
     </View>
   );
