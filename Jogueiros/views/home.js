@@ -72,7 +72,7 @@ function Populares() {
       height: '100%',
     },
     container: {
-      marginTop: 25,
+      marginTop: 28,
       paddingLeft: 18,
       paddingRight: 18,
       paddingBottom: 10,
@@ -80,8 +80,8 @@ function Populares() {
       borderColor: '#e8e8e8'
     },
     logoImage: {
-      width: '100%',
-      height: 66,
+      width: '101%',
+      height: 65,
     },
     searchSection: {
       flex: 1,
