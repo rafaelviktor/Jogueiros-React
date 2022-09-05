@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { StyleSheet, View, ScrollView, Text, TextInput, Image, Pressable } from 'react-native';
+import Ionic from 'react-native-vector-icons/Ionicons'
 
 import logo from '../assets/jogueiros-logo.png'
 
-function Home() {
+function Populares() {
     return (
       <View style={styles.root}>
         <View style={styles.container}>
           <Image style={styles.logoImage} source={logo}></Image>
-          <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} />
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} />
+            <Ionic name='search' size={25} color='#858585' style={styles.searchIcon}/>
+          </View>
         </View>
         <ScrollView overScrollMode='never'>
           <View style={styles.containerCards}>
@@ -79,11 +83,26 @@ function Home() {
       width: '100%',
       height: 66,
     },
-    inputpesquisa: {
-      backgroundColor: '#EAEAEA',
+    searchSection: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#fff',
+    },
+    searchIcon: {
       padding: 10,
-      borderRadius: 10,
-      textAlign: 'center'
+      backgroundColor: '#EAEAEA',
+      borderTopRightRadius: 10,
+      borderBottomRightRadius: 10
+    },
+    inputpesquisa: {
+      flex: 1,
+      padding: 10,
+      backgroundColor: '#EAEAEA',
+      color: '#424242',
+      borderTopLeftRadius: 10,
+      borderBottomLeftRadius: 10
     },
     containerCards: {
       marginLeft: 18,
@@ -115,4 +134,4 @@ function Home() {
     }
   });
 
-export default Home;
+export default Populares;
