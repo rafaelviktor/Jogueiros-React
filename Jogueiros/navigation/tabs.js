@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionic from 'react-native-vector-icons/Ionicons'
 
 import Home from '../views/home';
-import LoginPerfil from '../views/loginPerfil';
+import Conta from '../views/conta';
 import Populares from '../views/populares';
 
 const Tab = createBottomTabNavigator();
@@ -24,7 +24,7 @@ const Tabs = () => {
                     } else if (route.name === "Populares") {
                         iconName = focused ? "ios-football" : "ios-football-outline"
                         iconColor = focused ? "#1a9946" : "#828282"
-                    } else if (route.name === "Perfil") {
+                    } else if (route.name === "Conta") {
                         iconName = focused ? "person-circle-sharp" : "person-circle-outline"
                         iconColor = focused ? "#1a9946" : "#828282"
                     }
@@ -33,7 +33,7 @@ const Tabs = () => {
             })}>
             <Tab.Screen name="Explorar" component={Home} />
             <Tab.Screen name="Populares" component={Populares} />
-            <Tab.Screen name="Perfil" component={LoginPerfil} />
+            <Tab.Screen name="Conta" component={Conta} />
         </Tab.Navigator>
     );
 }

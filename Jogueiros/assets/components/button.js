@@ -20,6 +20,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10
     },
+    button_danger: {
+        backgroundColor: '#DC3545',
+        width: '100%',
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
     button_tertiary: {
         width: '70%',
         margin: 20,
@@ -28,6 +36,11 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text_primary: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    text_danger: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold'

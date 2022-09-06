@@ -1,0 +1,154 @@
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, Keyboard, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../assets/components/button';
+import api from '../assets/api/axios';
+
+function Perfil({ navigation }) {
+  const LOGIN_URL = '/users/entrar';
+  const PERFIL_URL = '/perfil';
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [perfilObj, setPerfilObj] = useState({})
+
+  useEffect(() => {
+    setIsLoading(true)
+    const getToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const response = await api.get(PERFIL_URL,{
+          headers: {'Content-Type':'application/json','token':`${token}`},
+          withCredentials: true
+        });
+        if(response.data.success === true) {
+          setPerfilObj(response.data.result)
+          setIsAuthenticated(true)
+        }
+      } catch (err) {
+        setIsAuthenticated(false)
+      }
+      setIsLoading(false)
+    }
+    getToken();
+  },[])
+
+  const Entrar = async () => {
+    setIsLoading(true)
+    const data = {
+      email: email,
+      senha: senha
+    }
+    try {
+      const response = await api.post(LOGIN_URL,JSON.stringify(data),
+        {
+          headers: {'Content-Type':'application/json'},
+          withCredentials: true
+        });
+        if(response.data.success === true) {
+          Keyboard.dismiss();
+          await AsyncStorage.setItem('token', response.data.result)
+          setIsAuthenticated(true)
+        } else if(response?.data.success === false) {
+          alert(response.data.message)
+        } else {
+          alert(response.data.message)
+        }
+    } catch (err) {
+        alert(err.response.data.message)
+    }
+    setIsLoading(false)
+  }
+
+  const Sair = async () => {
+    try {
+      await AsyncStorage.setItem('token', '')
+      setIsAuthenticated(false)
+    } catch (err) {
+      
+    }
+  }
+
+  if(isLoading === false) {
+    return (
+      <View style={styles.root}>
+        {isAuthenticated ? (
+        <View>
+          <Text style={styles.loginh1}>Perfil</Text>
+          <Text style={styles.loginh2}>Nome:</Text>
+          <Text style={styles.subtitle}>{perfilObj.nome}</Text>
+          <Text style={styles.loginh2}>E-Mail:</Text>
+          <Text style={styles.subtitle}>{perfilObj.email}</Text>
+          <Text style={styles.loginh2}>Contato:</Text>
+          <Text style={styles.subtitle}>{perfilObj.contato}</Text>
+            <Button title='Sair' type='danger' onpress={Sair}/>        
+        </View>
+        ) : (
+        <View style={styles.root}>
+          <Text style={styles.loginh1}>Entre ou cadastre-se na plataforma Jogueiros.</Text>
+          <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
+          <View style={styles.container}>
+            <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
+            <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
+            <Button title='Entrar' onpress={Entrar} style={{ width: '90%' }}/>
+            <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
+          </View>
+        </View>)}
+      </View>
+    );
+  } else {
+    return (
+    <View style={styles.center}>
+      <ActivityIndicator color={"#1a9946"} size="large" />
+    </View>)
+    }
+}
+
+  const styles = StyleSheet.create({
+    root: {
+      flex: 1,
+      marginLeft: 15,
+      marginRight: 15
+    },
+    center: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    loginh1: {
+      fontWeight: 'bold',
+      fontSize: 30,
+      marginTop: '18%'
+    },
+    loginh2: {
+      fontWeight: 'bold',
+      fontSize: 19,
+      marginTop: '8%'
+    },
+    subtitle: {
+      fontWeight: 'bold',
+      fontSize: 15,
+      marginTop: '5%'
+    },
+    label: {
+      marginTop: 20
+    },
+    email: {
+      width: '100%',
+      marginTop: 10,
+      backgroundColor: '#EAEAEA',
+      padding: 10,
+      borderRadius: 10
+    },
+    password: {
+      width: '100%',
+      marginTop: 10,
+      marginBottom: 10,
+      backgroundColor: '#EAEAEA',
+      padding: 10,
+      borderRadius: 10
+    }
+  });
+
+export default Perfil;

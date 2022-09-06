@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, View, Text, TextInput } from 'react-native';
 import { TextInputMask } from 'react-native-masked-text';
 import Button from '../assets/components/button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../assets/api/axios';
 
 function Cadastrar({ navigation }) {
@@ -29,7 +28,9 @@ function Cadastrar({ navigation }) {
           withCredentials: true
         });
         if(response.data.success === true) {
-          await AsyncStorage.setItem('token', response.data.result)
+          AsyncStorage.setItem('@TOKEN', response.data.result)
+          Keyboard.dismiss();
+          navigation.goBack();
           alert(response.data.message)
         } else if(response?.data.success === false) {
           alert(response.data.message)
@@ -37,7 +38,7 @@ function Cadastrar({ navigation }) {
           alert(response.data.message)
         }
     } catch (err) {
-        alert(err.message)
+        console.error(err)
     }
   }
 
