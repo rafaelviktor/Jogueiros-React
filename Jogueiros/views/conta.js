@@ -13,24 +13,25 @@ function Perfil({ navigation }) {
   const [senha, setSenha] = useState('');
   const [perfilObj, setPerfilObj] = useState({})
 
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await api.get(PERFIL_URL,{
+        headers: {'Content-Type':'application/json','token':`${token}`},
+        withCredentials: true
+      });
+      if(response.data.success === true) {
+        setPerfilObj(response.data.result)
+        setIsAuthenticated(true)
+      }
+    } catch (err) {
+      setIsAuthenticated(false)
+    }
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     setIsLoading(true)
-    const getToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await api.get(PERFIL_URL,{
-          headers: {'Content-Type':'application/json','token':`${token}`},
-          withCredentials: true
-        });
-        if(response.data.success === true) {
-          setPerfilObj(response.data.result)
-          setIsAuthenticated(true)
-        }
-      } catch (err) {
-        setIsAuthenticated(false)
-      }
-      setIsLoading(false)
-    }
     getToken();
   },[])
 
@@ -58,7 +59,8 @@ function Perfil({ navigation }) {
     } catch (err) {
         alert(err.response.data.message)
     }
-    setIsLoading(false)
+    await getToken();
+    setIsLoading(false);
   }
 
   const Sair = async () => {
@@ -74,24 +76,28 @@ function Perfil({ navigation }) {
     return (
       <View style={styles.root}>
         {isAuthenticated ? (
-        <View>
+        <View style={styles.colspacing}>
           <Text style={styles.loginh1}>Perfil</Text>
-          <Text style={styles.loginh2}>Nome:</Text>
-          <Text style={styles.subtitle}>{perfilObj.nome}</Text>
-          <Text style={styles.loginh2}>E-Mail:</Text>
-          <Text style={styles.subtitle}>{perfilObj.email}</Text>
-          <Text style={styles.loginh2}>Contato:</Text>
-          <Text style={styles.subtitle}>{perfilObj.contato}</Text>
-            <Button title='Sair' type='danger' onpress={Sair}/>        
+          <View>
+            <Text style={styles.loginh2}>Nome:</Text>
+            <Text style={styles.subtitle}>{perfilObj.nome}</Text>
+            <Text style={styles.loginh2}>E-Mail:</Text>
+            <Text style={styles.subtitle}>{perfilObj.email}</Text>
+            <Text style={styles.loginh2}>Contato:</Text>
+            <Text style={styles.subtitle}>{perfilObj.contato}</Text>
+          </View>
+          <Button title='Sair' type='danger' onpress={Sair}/>        
         </View>
         ) : (
-        <View style={styles.root}>
-          <Text style={styles.loginh1}>Entre ou cadastre-se na plataforma Jogueiros.</Text>
-          <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
-          <View style={styles.container}>
+        <View style={styles.colspacing}>
+          <View>
+            <Text style={styles.loginh1}>Entre ou cadastre-se na plataforma Jogueiros.</Text>
+            <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
+          </View>
+          <View style={styles.center}>
             <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
             <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
-            <Button title='Entrar' onpress={Entrar} style={{ width: '90%' }}/>
+            <Button title='Entrar' onpress={Entrar} />
             <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
           </View>
         </View>)}
@@ -100,7 +106,7 @@ function Perfil({ navigation }) {
   } else {
     return (
     <View style={styles.center}>
-      <ActivityIndicator color={"#1a9946"} size="large" />
+      <ActivityIndicator color={"#1a9946"} size={60} />
     </View>)
     }
 }
@@ -108,8 +114,9 @@ function Perfil({ navigation }) {
   const styles = StyleSheet.create({
     root: {
       flex: 1,
-      marginLeft: 15,
-      marginRight: 15
+      backgroundColor: '#ccc',
+      display: 'flex',
+      margin: 15
     },
     center: {
       flex: 1,
@@ -119,12 +126,10 @@ function Perfil({ navigation }) {
     loginh1: {
       fontWeight: 'bold',
       fontSize: 30,
-      marginTop: '18%'
     },
     loginh2: {
       fontWeight: 'bold',
       fontSize: 19,
-      marginTop: '8%'
     },
     subtitle: {
       fontWeight: 'bold',
@@ -133,6 +138,11 @@ function Perfil({ navigation }) {
     },
     label: {
       marginTop: 20
+    },
+    colspacing: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'space-between'
     },
     email: {
       width: '100%',
