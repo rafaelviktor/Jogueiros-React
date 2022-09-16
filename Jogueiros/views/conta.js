@@ -74,34 +74,43 @@ function Perfil({ navigation }) {
 
   if(isLoading === false) {
     return (
-      <View style={styles.root}>
+      <>
         {isAuthenticated ? (
-        <View style={styles.colspacing}>
+        <>
+        <View style={{backgroundColor: '#ccc', padding: 15}}>
           <Text style={styles.loginh1}>Perfil</Text>
-          <View>
-            <Text style={styles.loginh2}>Nome:</Text>
-            <Text style={styles.subtitle}>{perfilObj.nome}</Text>
-            <Text style={styles.loginh2}>E-Mail:</Text>
-            <Text style={styles.subtitle}>{perfilObj.email}</Text>
-            <Text style={styles.loginh2}>Contato:</Text>
-            <Text style={styles.subtitle}>{perfilObj.contato}</Text>
-          </View>
-          <Button title='Sair' type='danger' onpress={Sair}/>        
         </View>
+        <View style={styles.root}>
+          <View style={styles.colspacing}>
+            <View>
+              <Text style={styles.loginh2}>Nome:</Text>
+              <Text style={styles.subtitle}>{perfilObj.nome}</Text>
+              <Text style={styles.loginh2}>E-Mail:</Text>
+              <Text style={styles.subtitle}>{perfilObj.email}</Text>
+              <Text style={styles.loginh2}>Contato:</Text>
+              <Text style={styles.subtitle}>{perfilObj.contato}</Text>
+            </View>
+            <Button title='Sair' type='danger' onpress={Sair}/>        
+          </View>
+        </View>
+        </>
         ) : (
-        <View style={styles.colspacing}>
-          <View>
-            <Text style={styles.loginh1}>Entre ou cadastre-se na plataforma Jogueiros.</Text>
-            <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
+        <View style={styles.root}>
+          <View style={styles.colspacing}>
+            <View>
+              <Text style={styles.loginh1}>Entre ou cadastre-se na plataforma Jogueiros.</Text>
+              <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
+            </View>
+            <View style={styles.center}>
+              <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
+              <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
+              <Button title='Entrar' onpress={Entrar} />
+              <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
+            </View>
           </View>
-          <View style={styles.center}>
-            <TextInput placeholder='E-Mail' style={styles.email} value={email} onChangeText={setEmail}/>
-            <TextInput placeholder='Senha' style={styles.password} value={senha} onChangeText={setSenha} secureTextEntry/>
-            <Button title='Entrar' onpress={Entrar} />
-            <Button title='Não possui conta? Cadastre-se' onpress={() => navigation.navigate('Cadastrar')} type='tertiary'/>
-          </View>
-        </View>)}
-      </View>
+        </View>
+        )}
+      </>
     );
   } else {
     return (
@@ -114,9 +123,7 @@ function Perfil({ navigation }) {
   const styles = StyleSheet.create({
     root: {
       flex: 1,
-      backgroundColor: '#ccc',
-      display: 'flex',
-      margin: 15
+      margin: 15,
     },
     center: {
       flex: 1,
@@ -124,6 +131,7 @@ function Perfil({ navigation }) {
       alignItems: 'center'
     },
     loginh1: {
+      marginTop: 20,
       fontWeight: 'bold',
       fontSize: 30,
     },
