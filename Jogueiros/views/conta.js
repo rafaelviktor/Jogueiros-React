@@ -77,21 +77,24 @@ function Perfil({ navigation }) {
       <>
         {isAuthenticated ? (
         <>
-        <View style={{backgroundColor: '#ccc', padding: 15}}>
-          <Text style={styles.loginh1}>Perfil</Text>
-        </View>
-        <View style={styles.root}>
-          <View style={styles.colspacing}>
-            <View>
-              <Text style={styles.loginh2}>Nome:</Text>
-              <Text style={styles.subtitle}>{perfilObj.nome}</Text>
-              <Text style={styles.loginh2}>E-Mail:</Text>
-              <Text style={styles.subtitle}>{perfilObj.email}</Text>
-              <Text style={styles.loginh2}>Contato:</Text>
-              <Text style={styles.subtitle}>{perfilObj.contato}</Text>
-            </View>
-            <Button title='Sair' type='danger' onpress={Sair}/>        
+        <View style={{flex: 1, backgroundColor: '#1a9946'}}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+            <Text style={styles.loginh1}>Perfil</Text>
+            <Text style={styles.profileImage}>R</Text>
           </View>
+          <View style={styles.profileBackground}>
+            <View style={{flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
+              <Text style={styles.loginh2}>Nome:</Text>
+                <Text style={styles.subtitle}>{perfilObj.nome}</Text>
+                <Text style={styles.loginh2}>E-Mail:</Text>
+                <Text style={styles.subtitle}>{perfilObj.email}</Text>
+                <Text style={styles.loginh2}>Contato:</Text>
+                <Text style={styles.subtitle}>{perfilObj.contato}</Text>
+              </View>
+              <View>
+                <Button title='Sair' type='danger' onpress={Sair}/>
+              </View>
+            </View>
         </View>
         </>
         ) : (
@@ -151,6 +154,25 @@ function Perfil({ navigation }) {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'space-between'
+    },
+    profileBackground: {
+      flex: 1,
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      backgroundColor: 'white',
+      borderTopRightRadius: 10,
+      borderTopLeftRadius: 10
+    },
+    profileImage: {
+      width: 80,
+      height: 80,
+      borderRadius: 100,
+      backgroundColor: '#512DA8',
+      fontSize: 33,
+      color: '#fff',
+      textAlign: 'center',
+      lineHeight: 80,
+      margin: 20
     },
     email: {
       width: '100%',
