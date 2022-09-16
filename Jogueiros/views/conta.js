@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TextInput, Keyboard, ActivityIndicator } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
@@ -77,9 +78,9 @@ function Perfil({ navigation }) {
       <>
         {isAuthenticated ? (
         <>
-        <View style={{flex: 1, backgroundColor: '#1a9946'}}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
-            <Text style={styles.loginh1}>Perfil</Text>
+        <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={{flex: 1}}>
+          <Text style={styles.loginh1}>Perfil</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={styles.profileImage}>R</Text>
           </View>
           <View style={styles.profileBackground}>
@@ -95,7 +96,7 @@ function Perfil({ navigation }) {
                 <Button title='Sair' type='danger' onpress={Sair}/>
               </View>
             </View>
-        </View>
+        </LinearGradient>
         </>
         ) : (
         <View style={styles.root}>
@@ -164,14 +165,16 @@ function Perfil({ navigation }) {
       borderTopLeftRadius: 10
     },
     profileImage: {
-      width: 80,
-      height: 80,
+      width: 90,
+      height: 90,
+      borderWidth: 3,
+      borderColor: 'white',
       borderRadius: 100,
       backgroundColor: '#512DA8',
-      fontSize: 33,
+      fontSize: 35,
       color: '#fff',
       textAlign: 'center',
-      lineHeight: 80,
+      lineHeight: 90,
       margin: 20
     },
     email: {
