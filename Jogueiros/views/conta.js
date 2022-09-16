@@ -78,10 +78,10 @@ function Perfil({ navigation }) {
       <>
         {isAuthenticated ? (
         <>
-        <LinearGradient colors={['#4c669f', '#3b5998', '#192f6a']} style={{flex: 1}}>
+        <LinearGradient colors={['white', '#1a9946', '#1a9946', '#1a9946']} style={{flex: 1}}>
           <Text style={styles.loginh1}>Perfil</Text>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-            <Text style={styles.profileImage}>R</Text>
+            <Text style={styles.profileImage}>{perfilObj.nome.charAt(0)}</Text>
           </View>
           <View style={styles.profileBackground}>
             <View style={{flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
@@ -135,7 +135,7 @@ function Perfil({ navigation }) {
       alignItems: 'center'
     },
     loginh1: {
-      marginTop: 20,
+      marginTop: 30,
       fontWeight: 'bold',
       fontSize: 30,
     },
@@ -170,7 +170,7 @@ function Perfil({ navigation }) {
       borderWidth: 3,
       borderColor: 'white',
       borderRadius: 100,
-      backgroundColor: '#512DA8',
+      backgroundColor: '#1a9946',
       fontSize: 35,
       color: '#fff',
       textAlign: 'center',
