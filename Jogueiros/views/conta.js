@@ -78,12 +78,14 @@ function Perfil({ navigation }) {
       <>
         {isAuthenticated ? (
         <>
-        <LinearGradient colors={['white', '#1a9946', '#1a9946', '#1a9946']} style={{flex: 1}}>
-          <Text style={styles.loginh1}>Perfil</Text>
+        <LinearGradient colors={['#1a9946', '#40E0D0', '#40E0D0', '#40E0D0']} style={{flex: 1, marginTop: 25}}>
+          <View style={{marginTop: 25, marginLeft: 15, marginBottom: 0}}>
+            <Text style={styles.perfilh1}>Perfil</Text>
+          </View>
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={styles.profileImage}>{perfilObj.nome.charAt(0)}</Text>
           </View>
-          <View style={styles.profileBackground}>
+          <View style={styles.profileContainer}>
             <View style={{flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
               <Text style={styles.loginh2}>Nome:</Text>
                 <Text style={styles.subtitle}>{perfilObj.nome}</Text>
@@ -92,7 +94,7 @@ function Perfil({ navigation }) {
                 <Text style={styles.loginh2}>Contato:</Text>
                 <Text style={styles.subtitle}>{perfilObj.contato}</Text>
               </View>
-              <View>
+              <View style={{margin: 10}}>
                 <Button title='Sair' type='danger' onpress={Sair}/>
               </View>
             </View>
@@ -134,8 +136,12 @@ function Perfil({ navigation }) {
       justifyContent: 'center',
       alignItems: 'center'
     },
+    perfilh1: {
+      color: '#fff',
+      fontWeight: 'bold',
+      fontSize: 30,
+    },
     loginh1: {
-      marginTop: 30,
       fontWeight: 'bold',
       fontSize: 30,
     },
@@ -156,11 +162,12 @@ function Perfil({ navigation }) {
       flexDirection: 'column',
       justifyContent: 'space-between'
     },
-    profileBackground: {
+    profileContainer: {
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'space-between',
       backgroundColor: 'white',
+      padding: 20,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
     },
