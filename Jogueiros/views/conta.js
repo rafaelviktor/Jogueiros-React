@@ -86,18 +86,16 @@ function Perfil({ navigation }) {
             <Text style={styles.profileImage}>{perfilObj.nome.charAt(0)}</Text>
           </View>
           <View style={styles.profileContainer}>
-            <View style={{flex: 1, borderTopLeftRadius: 20, borderTopRightRadius: 20}}>
-              <Text style={styles.loginh2}>Nome:</Text>
-                <Text style={styles.subtitle}>{perfilObj.nome}</Text>
-                <Text style={styles.loginh2}>E-Mail:</Text>
-                <Text style={styles.subtitle}>{perfilObj.email}</Text>
-                <Text style={styles.loginh2}>Contato:</Text>
-                <Text style={styles.subtitle}>{perfilObj.contato}</Text>
-              </View>
-              <View style={{margin: 10}}>
-                <Button title='Sair' type='danger' onpress={Sair}/>
-              </View>
+            <View style={{borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center'}}>
+              <Text style={styles.loginh2}>{perfilObj.nome}</Text>
+              <Text style={styles.subtitle}>{perfilObj.email}</Text>
             </View>
+            <View style={{flex: 1, marginBottom: 20, backgroundColor: '#ccc'}}>
+              <Text style={styles.loginh2}>{perfilObj.nome}</Text>
+              <Text style={styles.subtitle}>{perfilObj.email}</Text>
+            </View>
+            <Button title='Sair' type='danger' onpress={Sair}/>
+          </View>
         </LinearGradient>
         </>
         ) : (
@@ -167,13 +165,13 @@ function Perfil({ navigation }) {
       flexDirection: 'column',
       justifyContent: 'space-between',
       backgroundColor: 'white',
-      padding: 20,
+      padding: 18,
       borderTopRightRadius: 10,
       borderTopLeftRadius: 10
     },
     profileImage: {
-      width: 90,
-      height: 90,
+      width: 100,
+      height: 100,
       borderWidth: 3,
       borderColor: 'white',
       borderRadius: 100,
@@ -181,8 +179,8 @@ function Perfil({ navigation }) {
       fontSize: 35,
       color: '#fff',
       textAlign: 'center',
-      lineHeight: 90,
-      margin: 20
+      lineHeight: 100,
+      margin: 15
     },
     email: {
       width: '100%',
