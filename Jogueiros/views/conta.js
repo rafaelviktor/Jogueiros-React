@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, Keyboard, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Keyboard, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
@@ -85,14 +85,27 @@ function Perfil({ navigation }) {
           <View style={{flexDirection: 'row', justifyContent: 'center'}}>
             <Text style={styles.profileImage}>{perfilObj.nome.charAt(0)}</Text>
           </View>
-          <View style={styles.profileContainer}>
+          <View style={[styles.profileContainer, styles.profileContainerShadow]}>
             <View style={{borderTopLeftRadius: 20, borderTopRightRadius: 20, alignItems: 'center'}}>
               <Text style={styles.loginh2}>{perfilObj.nome}</Text>
-              <Text style={styles.subtitle}>{perfilObj.email}</Text>
+              <Text style={styles.subtitleemail}>{perfilObj.email}</Text>
             </View>
-            <View style={{flex: 1, marginBottom: 20, backgroundColor: '#ccc'}}>
-              <Text style={styles.loginh2}>{perfilObj.nome}</Text>
-              <Text style={styles.subtitle}>{perfilObj.email}</Text>
+            <View style={{flex: 1, marginTop: 20, marginBottom: 20, backgroundColor: '#F8F8F8', paddingTop: 15, paddingBottom: 15, borderRadius: 15}}>
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+                <View style={{padding: 13, borderTopWidth: 1, borderTopColor: '#ccc'}}>
+                  <Text style={styles.subtitle}>Editar perfil</Text>
+                </View>
+              </TouchableNativeFeedback>
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+                <View style={{padding: 13, borderTopWidth: 1, borderTopColor: '#ccc'}}>
+                  <Text style={styles.subtitle}>Meus anúncios</Text>
+                </View>
+              </TouchableNativeFeedback>
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+                <View style={{padding: 13, borderTopWidth: 1, borderBottomWidth: 1, borderColor: '#ccc'}}>
+                  <Text style={styles.subtitle}>Minhas reservas</Text>
+                </View>
+              </TouchableNativeFeedback>
             </View>
             <Button title='Sair' type='danger' onpress={Sair}/>
           </View>
@@ -150,7 +163,12 @@ function Perfil({ navigation }) {
     subtitle: {
       fontWeight: 'bold',
       fontSize: 15,
-      marginTop: '5%'
+    },
+    subtitleemail: {
+      fontSize: 15,
+      color: '#6b6b6b',
+      marginTop: 4,
+      marginBottom: 4
     },
     label: {
       marginTop: 20
@@ -166,8 +184,14 @@ function Perfil({ navigation }) {
       justifyContent: 'space-between',
       backgroundColor: 'white',
       padding: 18,
-      borderTopRightRadius: 10,
-      borderTopLeftRadius: 10
+      borderTopRightRadius: 15,
+      borderTopLeftRadius: 15
+    },
+    profileContainerShadow: {
+      shadowColor: '#171717',
+      shadowOffset: {width: 8, height: 5},
+      shadowOpacity: 1,
+      shadowRadius: 3,
     },
     profileImage: {
       width: 100,
