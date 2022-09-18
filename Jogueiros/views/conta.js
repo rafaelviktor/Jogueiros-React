@@ -91,17 +91,17 @@ function Perfil({ navigation }) {
               <Text style={styles.subtitleemail}>{perfilObj.email}</Text>
             </View>
             <View style={styles.profileMenu}>
-              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} onPress={() => navigation.navigate('Editar perfil')}>
                 <View style={styles.profileMenuItem}>
                   <Text style={styles.subtitle}>Editar perfil</Text>
                 </View>
               </TouchableNativeFeedback>
-              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} onPress={() => navigation.navigate('Meus anúncios')}>
                 <View style={styles.profileMenuItem}>
                   <Text style={styles.subtitle}>Meus anúncios</Text>
                 </View>
               </TouchableNativeFeedback>
-              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} >
+              <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#cccccc', false, 200)} onPress={() => navigation.navigate('Minhas reservas')}>
                 <View style={[styles.profileMenuItem, {borderBottomWidth: 1}]}>
                   <Text style={styles.subtitle}>Minhas reservas</Text>
                 </View>
