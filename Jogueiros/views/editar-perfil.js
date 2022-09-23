@@ -1,19 +1,43 @@
-import React, { useState, useRef } from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TextInputMask } from 'react-native-masked-text';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
 
 function EditarPerfil({ navigation }) {
-  const CADASTRO_URL = '/users/registrar';
-
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [contato, setContato] = useState('');
   const celRef = useRef(null);
+  const [perfilId, setPerfilId] = useState({})
 
-  const Registrar = async () => {
+  const PERFIL_URL = '/perfil';
+  
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await api.get(PERFIL_URL,{
+        headers: {'Content-Type':'application/json','token':`${token}`},
+        withCredentials: true
+      });
+      if(response.data.success === true) {
+        setPerfilId(response.data.result._id)
+        setNome(response.data.result.nome)
+        setEmail(response.data.result.email)
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+  
+  useEffect(() => {
+    getToken();
+  },[])
+
+  const Alterar = async () => {
+    const token = await AsyncStorage.getItem('token');
     const contatoNoMask = celRef?.current.getRawValue();
     const data = {
       nome: nome,
@@ -22,14 +46,13 @@ function EditarPerfil({ navigation }) {
       contato: contatoNoMask
     }
     try {
-      const response = await api.post(CADASTRO_URL,JSON.stringify(data),
+      const EDITAR_URL = `/perfil/alterar/${perfilId}`;
+      const response = await api.patch(EDITAR_URL,JSON.stringify(data),
         {
-          headers: {'Content-Type':'application/json'},
+          headers: {'Content-Type':'application/json','token':`${token}`},
           withCredentials: true
         });
         if(response.data.success === true) {
-          AsyncStorage.setItem('@TOKEN', response.data.result)
-          Keyboard.dismiss();
           navigation.goBack();
           alert(response.data.message)
         } else if(response?.data.success === false) {
@@ -44,14 +67,14 @@ function EditarPerfil({ navigation }) {
 
   return (
     <View style={styles.root}>
-      <Text style={styles.registerh1}>Insira seus dados para finalizar o cadastro </Text>
+      <Text style={styles.registerh1}>Dados da conta</Text>
+      <Text style={styles.subtitle}>Informe abaixo as novas informações:</Text>
       <View style={styles.container}>
         <TextInput placeholder='Nome' style={styles.inputText} value={nome} onChangeText={setNome}/>
         <TextInput placeholder='E-Mail' style={styles.inputText} value={email} onChangeText={setEmail}/>
         <TextInput placeholder='Senha' style={styles.inputText} value={senha} onChangeText={setSenha} secureTextEntry/>
         <TextInputMask placeholder='Celular' style={styles.inputContato} type={'cel-phone'} value={contato} ref={celRef} onChangeText={setContato}/>
-        <Button title='Criar conta' onpress={Registrar} style={{ width: '100%' }}/>
-        <Button title='Já possui conta? Faça login' onpress={() => navigation.goBack()} type='tertiary'/>
+        <Button title='Salvar alterações' onpress={Alterar} style={{ width: '100%' }}/>
       </View>
     </View>
   );

@@ -115,7 +115,7 @@ function Perfil({ navigation }) {
         <View style={styles.root}>
           <View style={styles.colspacing}>
             <View>
-              <Text style={styles.loginh1}>Bem-vindo! Entre ou cadastre-se na plataforma Jogueiros.</Text>
+              <Text style={[styles.loginh1, {marginTop: 20}]}>Bem-vindo! Entre ou cadastre-se na plataforma Jogueiros.</Text>
               <Text style={styles.subtitle}>Aqui é possível anunciar seu espaço esportivo ou procurar por um local de sua preferência!</Text>
             </View>
             <View style={styles.center}>
