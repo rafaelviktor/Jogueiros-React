@@ -61,7 +61,8 @@ function EditarPerfil({ navigation }) {
           alert(response.data.message)
         }
     } catch (err) {
-        console.error(err)
+      alert(err.response.data.message)
+      console.error(err)
     }
   }
 

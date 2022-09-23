@@ -53,12 +53,13 @@ function Perfil({ navigation }) {
           await AsyncStorage.setItem('token', response.data.result)
           setIsAuthenticated(true)
         } else if(response?.data.success === false) {
-          alert(response.data.message)
+          console.log(response.data)
         } else {
-          alert(response.data.message)
+          console.log(response.data)
         }
     } catch (err) {
-        alert(err.response.data.message)
+      alert(err.response.data.message)
+      console.log(err.response.data)
     }
     await getToken();
     setIsLoading(false);
