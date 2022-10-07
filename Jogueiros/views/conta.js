@@ -32,7 +32,6 @@ function Perfil({ navigation }) {
   }
 
   useEffect(() => {
-    setIsLoading(true)
     getToken();
   },[])
 
