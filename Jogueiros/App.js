@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import Cadastrar from './views/cadastrar'
-import EditarPerfil from './views/editar-perfil'
-import Tabs from './navigation/tabs'
+import Cadastrar from './views/cadastrar';
+import EditarPerfil from './views/editar-perfil';
+import MeusAnuncios from './views/meus-anuncios';
+import MinhasReservas from './views/minhas-reservas';
+import Tabs from './navigation/tabs';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,8 +28,8 @@ function App() {
           />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Editar perfil" component={EditarPerfil} />
-          <Stack.Screen name="Meus anúncios" component={Cadastrar} />
-          <Stack.Screen name="Minhas reservas" component={Cadastrar} />
+          <Stack.Screen name="Meus anúncios" component={MeusAnuncios} />
+          <Stack.Screen name="Minhas reservas" component={MinhasReservas} />
       </Stack.Navigator>
     </NavigationContainer>
   );
