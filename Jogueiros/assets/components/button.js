@@ -6,7 +6,7 @@ const Button = ({ title, type = 'primary' , onpress }) => {
     if(type === 'booking') {
         return (
             <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
-                <Ionic name='search' size={20} color='white' style={{paddingRight: 5}}/>
+                <Ionic name='logo-usd' size={20} color='white' style={{paddingRight: 5}}/>
                 <Text style={styles[`text_${type}`]}>{title}</Text>
             </TouchableOpacity>
         )
