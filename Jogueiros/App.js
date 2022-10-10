@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
+import Anuncio from './views/anuncio';
 import Cadastrar from './views/cadastrar';
 import EditarPerfil from './views/editar-perfil';
 import MeusAnuncios from './views/meus-anuncios';
@@ -26,6 +27,7 @@ function App() {
             component={Root}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Anúncio" component={Anuncio} />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Editar perfil" component={EditarPerfil} />
           <Stack.Screen name="Meus anúncios" component={MeusAnuncios} />

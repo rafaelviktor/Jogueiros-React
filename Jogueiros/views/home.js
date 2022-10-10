@@ -5,7 +5,7 @@ import Ionic from 'react-native-vector-icons/Ionicons';
 import logo from '../assets/jogueiros-logo.png';
 import api from '../assets/api/axios';
 
-function Home() {
+function Home({ navigation }) {
   const ANUNCIOS_URL = '/anuncios';
 
   const [anuncios, setAnunciosObj] = useState({});
@@ -49,7 +49,7 @@ function Home() {
           <View style={styles.containerCards}>
           {
             anuncios && anuncios.map((item, index) => (
-            <Pressable key={index} onPress={() => console.log('abriu o anuncio')}>
+            <Pressable key={index} onPress={() => navigation.navigate('Anúncio', { id_anuncio: item._id })}>
               <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
