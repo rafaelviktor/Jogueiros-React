@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, ScrollView, Pressable, Image, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../assets/components/button';
 import api from '../assets/api/axios';
 
 function Anuncio({ route, navigation }) {
-  const {id_anuncio} = route.params.id_anuncio;
-  const ANUNCIO_URL = `/anuncios/${id_anuncio}`;
+  const ANUNCIO_URL = `/anuncios/${route.params.id_anuncio}`;
+  const ANUNCIANTE_URL = `/users/${route.params.id_anunciante}`;
 
-  const [anuncio, setAnuncioObj] = useState({});
+  const [anuncio, setAnuncioObj] = useState([]);
+  const [anunciante, setAnuncianteObj] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
       const response = await api.get(ANUNCIO_URL,{
-        headers: {'Content-Type':'application/json','token':`${token}`},
-        withCredentials: true
+        headers: {'Content-Type':'application/json'}
       });
       if(response.data.success === true) {
         setAnuncioObj(response.data.result)
-        setIsAuthenticated(true)
       }
     } catch (err) {
-      setIsAuthenticated(false);
+      navigation.goBack();
+      console.log(err)
+    }
+    try {
+      const response = await api.get(ANUNCIANTE_URL,{
+        headers: {'Content-Type':'application/json'}
+      });
+      if(response.data.success === true) {
+        setAnuncianteObj(response.data.result)
+      }
+    } catch (err) {
       navigation.goBack();
       console.log(err)
     }
@@ -37,23 +44,41 @@ function Anuncio({ route, navigation }) {
   if(isLoading === false) {
     return (
       <View style={styles.root}>
-        <View style={styles.containerCards}>
-          {
-            anuncio && anuncio.map((item, index) => (
-            <View key={index}>
-              <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-                  <Text style={styles.cardTitle}>{item.titulo}</Text>
-                  <Text style={styles.cardSubtitle}>{item.visualizacoes} Visualizações</Text>
+        <ScrollView overScrollMode='never'>
+          <View>
+            {
+              <View>
+                <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${anuncio.imagem}`}}></Image>
+                <View style={styles.container}>
+                  <View>
+                    <Text style={styles.cardTitle}>{anuncio.titulo}</Text>
+                    <Text style={styles.cardMuted}>{anuncio.logradouro}{anuncio.numero ? ", "+anuncio.numero : ""}</Text>
+                  </View>
+                  <View style={styles.hr} />
+                  <View style={{marginTop: 20}}>
+                    <Text style={styles.cardTitle}>Descrição</Text>
+                    <Text style={styles.cardText}>{anuncio.descricao}</Text>
+                  </View>
+                  <View style={styles.hr} />
+                  <View style={{marginTop: 20}}>
+                    <Text style={styles.cardTitle}>Anunciante</Text>
+                    <Text style={styles.cardText}>{anunciante.nome}</Text>
+                    <Text style={styles.cardSubtitle}>Contatos:</Text>
+                    <Text style={styles.cardText}>{anunciante.email}</Text>
+                    <Text style={styles.cardText}>{anunciante.contato}</Text>
+                  </View>
                 </View>
-                <Text style={styles.cardPrice}>{item.preco} R$ /hora</Text>
               </View>
-            </View>
-            ))
-          }
+            }
+          </View>
+        </ScrollView>
+        <View style={styles.footer}>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.cardPrice}>{anuncio.preco} R$ /hora</Text>
+            <Button type='booking' title='Reservar' onpress={() => console.log('reservar')} style={{ width: '40%' }}/>
+          </View>
         </View>
-    </View>
+      </View>
     );
 } else {
     return (
@@ -70,12 +95,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   container: {
-    marginTop: 28,
-    paddingLeft: 18,
-    paddingRight: 18,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderColor: '#e8e8e8'
+    marginLeft: 15,
+    marginRight: 15
   },
   logoImage: {
     width: '101%',
@@ -102,31 +123,32 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10
   },
-  containerCards: {
-    marginLeft: 18,
-    marginRight: 18
-  },
   cardImage: {
-    marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 30,
     width: '100%',
-    height: 250,
-    borderRadius: 15
+    height: 250
   },
   cardTitle: {
-    marginLeft: 8,
-    fontSize: 18,
+    fontSize: 23,
     fontWeight: 'bold'
   },
   cardSubtitle: {
-    marginLeft: 8,
+    fontSize: 18,
+    fontWeight: '500'
+  },
+  cardMuted: {
+    marginTop: 5,
     color: '#878787',
-    fontSize: 13,
+    fontSize: 17,
     fontWeight: 'bold'
   },
+  cardText: {
+    marginTop: 5,
+    fontSize: 17
+  },
   cardPrice: {
-    marginRight: 10,
-    fontSize: 18,
+    lineHeight: 45,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#1a9946'
   },
@@ -134,6 +156,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  hr: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#D9D9D9',
+    paddingBottom: 25
+  },
+  footer: {
+    borderTopWidth: 1,
+    borderColor: '#D9D9D9',
+    padding: 13
   }
 });
 
