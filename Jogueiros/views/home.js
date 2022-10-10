@@ -10,7 +10,6 @@ function Home({ navigation }) {
 
   const [anuncios, setAnunciosObj] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const getToken = async () => {
     try {
