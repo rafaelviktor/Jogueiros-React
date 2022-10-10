@@ -21,10 +21,8 @@ function Home({ navigation }) {
       });
       if(response.data.success === true) {
         setAnunciosObj(response.data.result)
-        setIsAuthenticated(true)
       }
     } catch (err) {
-      setIsAuthenticated(false);
       navigation.goBack();
     }
     setIsLoading(false)
