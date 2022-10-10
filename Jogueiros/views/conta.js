@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIsFocused } from "@react-navigation/native";
 import { StyleSheet, View, Text, TextInput, Keyboard, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -6,6 +7,7 @@ import Button from '../assets/components/button';
 import api from '../assets/api/axios';
 
 function Perfil({ navigation }) {
+  const isFocused = useIsFocused();
   const LOGIN_URL = '/users/entrar';
   const PERFIL_URL = '/perfil';
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +35,7 @@ function Perfil({ navigation }) {
 
   useEffect(() => {
     getToken();
-  },[])
+  },[isFocused])
 
   const Entrar = async () => {
     setIsLoading(true)

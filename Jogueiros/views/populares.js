@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useIsFocused } from "@react-navigation/native";
 import { StyleSheet, View, ScrollView, Text, TextInput, Image, Pressable, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionic from 'react-native-vector-icons/Ionicons';
@@ -6,6 +7,7 @@ import logo from '../assets/jogueiros-logo.png';
 import api from '../assets/api/axios';
 
 function Populares() {
+  const isFocused = useIsFocused();
   const ANUNCIOS_URL = '/anuncios/populares';
 
   const [anuncios, setAnunciosObj] = useState({});
@@ -33,7 +35,7 @@ function Populares() {
 
   useEffect(() => {
     getToken();
-  },[])
+  },[isFocused])
 
   if(isLoading === false) {
     return (
