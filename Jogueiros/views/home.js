@@ -26,7 +26,6 @@ function Home({ navigation }) {
     } catch (err) {
       setIsAuthenticated(false);
       navigation.goBack();
-      await AsyncStorage.setItem('token', '');
     }
     setIsLoading(false)
   }
