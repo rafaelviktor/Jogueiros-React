@@ -6,7 +6,7 @@ import Ionic from 'react-native-vector-icons/Ionicons';
 import logo from '../assets/jogueiros-logo.png';
 import api from '../assets/api/axios';
 
-function Populares() {
+function Populares({ navigation }) {
   const isFocused = useIsFocused();
   const ANUNCIOS_URL = '/anuncios/populares';
 
@@ -51,7 +51,7 @@ function Populares() {
           <View style={styles.containerCards}>
           {
             anuncios && anuncios.map((item, index) => (
-            <Pressable key={index}>
+            <Pressable key={index} onPress={() => navigation.navigate('Anúncio', { id_anuncio: item._id })}>
               <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
