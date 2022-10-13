@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Pressable, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Pressable, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../assets/api/axios';
 
-function MeusAnuncios({ navigation }) {
-  const MEUSANUNCIOS_URL = '/perfil/meus-anuncios';
+function MinhasReservas({ navigation }) {
+  const MINHASRESERVAS_URL = '/perfil/minhas-reservas';
 
-  const [anuncios, setAnunciosObj] = useState({});
+  const [reservas, setReservasObj] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await api.get(MEUSANUNCIOS_URL,{
+      const response = await api.get(MINHASRESERVAS_URL,{
         headers: {'Content-Type':'application/json','token':`${token}`},
         withCredentials: true
       });
       if(response.data.success === true) {
-        setAnunciosObj(response.data.result)
-        setIsAuthenticated(true)
+        setReservasObj(response.data.result)
       }
     } catch (err) {
-      setIsAuthenticated(false);
       navigation.goBack();
       await AsyncStorage.setItem('token', '');
     }
@@ -34,27 +31,47 @@ function MeusAnuncios({ navigation }) {
   },[])
 
   if(isLoading === false) {
-    return (
-      <View style={styles.root}>
-      <ScrollView overScrollMode='never'>
-        <View style={styles.containerCards}>
-          {
-            anuncios && anuncios.map((item, index) => (
-            <Pressable key={index}>
-              <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-                  <Text style={styles.cardTitle}>{item.titulo}</Text>
+    if(reservas.length === 0) {
+      return (
+      <View style={styles.center}>
+        <Text style={styles.cardTitle}>Você não possui nenhuma reserva.</Text>
+      </View>
+      )
+    } else {
+      return (
+        <View style={styles.root}>
+        <ScrollView overScrollMode='never' style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.containerCards}>
+            {
+              reservas && reservas.map((item, index) => (
+              <Pressable key={index}>
+                <View style={[styles.cardBody, styles.shadowProp, styles.elevation]}>
+                  <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Text style={styles.heading}>Dados da sua reserva</Text>
+                    <Text style={styles.status}>{item.status}</Text>
+                    </View>
+                    <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                      <Text style={styles.textNormal}>Data: {item.data_reserva} | Início: {item.hora_inicio} - Final: {item.hora_final}</Text>
+                      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+                        <Text style={styles.textMuted}>Data de criação: {item.data_inclusao}</Text>
+                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#f75c5c', true, 26)}>
+                          <View>
+                            <Text style={styles.textDelete}>EXCLUIR</Text>
+                          </View>
+                        </TouchableNativeFeedback>
+                      </View>
+                    </View>
+                  </View>
                 </View>
-                <Text style={styles.cardPrice}>{item.preco} R$ /hora</Text>
-              </View>
-            </Pressable>
-            ))
-          }
-        </View>
-      </ScrollView>
-    </View>
-    );
+              </Pressable>
+              ))
+            }
+          </View>
+        </ScrollView>
+      </View>
+      )
+    }
 } else {
     return (
     <View style={styles.center}>
@@ -106,29 +123,51 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginRight: 18
   },
-  cardImage: {
-    marginTop: 10,
-    marginBottom: 10,
-    width: '100%',
-    height: 250,
-    borderRadius: 15
+  cardIcon: {
+
   },
-  cardTitle: {
-    marginLeft: 8,
+  heading: {
     fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 7,
+  },
+  cardBody: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    paddingVertical: 25,
+    paddingHorizontal: 25,
+    width: '100%',
+    marginVertical: 10,
+  },
+  shadowProp: {
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  elevation: {
+    elevation: 10,
+    shadowColor: '#52006A',
+  },
+  textNormal: {
+    fontSize: 14,
     fontWeight: 'bold'
   },
-  cardSubtitle: {
-    marginLeft: 8,
+  textMuted: {
     color: '#878787',
     fontSize: 13,
     fontWeight: 'bold'
   },
-  cardPrice: {
+  textDelete: {
+    color: '#eb3434',
+    fontSize: 13,
+    fontWeight: 'bold'
+  },
+  status: {
     marginRight: 10,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#1a9946'
+    color: '#878787'
   },
   center: {
     flex: 1,
@@ -137,4 +176,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MeusAnuncios;
+export default MinhasReservas;
