@@ -123,8 +123,10 @@ const styles = StyleSheet.create({
     marginLeft: 18,
     marginRight: 18
   },
-  cardIcon: {
-
+  cardTitle: {
+    marginLeft: 8,
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   heading: {
     fontSize: 18,
