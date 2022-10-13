@@ -6,7 +6,7 @@ import api from '../assets/api/axios';
 function MeusAnuncios({ navigation }) {
   const MEUSANUNCIOS_URL = '/perfil/meus-anuncios';
 
-  const [anuncios, setAnunciosObj] = useState({});
+  const [anuncios, setAnunciosObj] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -34,28 +34,36 @@ function MeusAnuncios({ navigation }) {
   },[])
 
   if(isLoading === false) {
-    return (
-      <View style={styles.root}>
-      <ScrollView overScrollMode='never'>
-        <View style={styles.containerCards}>
-          {
-            anuncios && anuncios.map((item, index) => (
-            <Pressable key={index}>
-              <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
-              <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-                  <Text style={styles.cardTitle}>{item.titulo}</Text>
-                  <Text style={styles.cardSubtitle}>{item.visualizacoes} Visualizações</Text>
+    if(anuncios.length === 0) {
+      return (
+      <View style={styles.center}>
+        <Text style={styles.cardTitle}>Você não possui nenhum anúncio.</Text>
+      </View>
+      )
+    } else {
+      return (
+        <View style={styles.root}>
+        <ScrollView overScrollMode='never'>
+          <View style={styles.containerCards}>
+            {
+              anuncios && anuncios.map((item, index) => (
+              <Pressable key={index}>
+                <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
+                <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <Text style={styles.cardTitle}>{item.titulo}</Text>
+                    <Text style={styles.cardSubtitle}>{item.visualizacoes} Visualizações</Text>
+                  </View>
+                  <Text style={styles.cardPrice}>{item.preco} R$ /hora</Text>
                 </View>
-                <Text style={styles.cardPrice}>{item.preco} R$ /hora</Text>
-              </View>
-            </Pressable>
-            ))
-          }
-        </View>
-      </ScrollView>
-    </View>
-    );
+              </Pressable>
+              ))
+            }
+          </View>
+        </ScrollView>
+      </View>
+      )
+    }
 } else {
     return (
     <View style={styles.center}>
@@ -133,6 +141,7 @@ const styles = StyleSheet.create({
   },
   center: {
     flex: 1,
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center'
   }
