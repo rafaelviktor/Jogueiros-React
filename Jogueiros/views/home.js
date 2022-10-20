@@ -117,7 +117,8 @@ function Home({ navigation }) {
     },
     containerCards: {
       marginLeft: 18,
-      marginRight: 18
+      marginRight: 18,
+      marginBottom: 18
     },
     cardImage: {
       marginTop: 10,
