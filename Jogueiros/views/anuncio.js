@@ -48,7 +48,7 @@ function Anuncio({ route, navigation }) {
           <View>
             {
               <View>
-                <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${anuncio.imagem}`}}></Image>
+                <Image style={styles.cardImage} source={{uri : `https://i.imgur.com/${anuncio.imagem}`}}></Image>
                 <View style={styles.container}>
                   <View>
                     <Text style={styles.cardTitle}>{anuncio.titulo}</Text>

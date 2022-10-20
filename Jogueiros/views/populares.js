@@ -52,7 +52,7 @@ function Populares({ navigation }) {
           {
             anuncios && anuncios.map((item, index) => (
             <Pressable key={index} onPress={() => navigation.navigate('Anúncio', { id_anuncio: item._id, id_anunciante: item.id_anunciante })}>
-              <Image style={styles.cardImage} source={{uri : `https://jogueiros-api.herokuapp.com/uploads/${item.imagem}`}}></Image>
+              <Image style={styles.cardImage} source={{uri : `https://i.imgur.com/${item.imagem}`}}></Image>
               <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                   <Text style={styles.cardTitle}>{item.titulo}</Text>
