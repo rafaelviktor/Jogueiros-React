@@ -10,6 +10,12 @@ const Button = ({ title, type = 'primary' , onpress }) => {
                 <Text style={styles[`text_${type}`]}>{title}</Text>
             </TouchableOpacity>
         )
+    } else if(type === 'mini') {
+        return (
+            <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
+                <Text style={styles[`text_${type}`]}>{title}</Text>
+            </TouchableOpacity>
+        )
     } else {
         return (
             <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
@@ -55,6 +61,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10
     },
+    button_mini: {
+        display: 'flex', 
+        flexDirection: 'row',
+        backgroundColor: '#1a9946',
+        width: '35%',
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
     text_primary: {
         color: 'white',
         fontSize: 18,
@@ -71,6 +87,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     text_booking: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold'
+    },
+    text_mini: {
         color: 'white',
         fontSize: 18,
         fontWeight: 'bold'
