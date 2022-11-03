@@ -42,10 +42,6 @@ function Populares({ navigation }) {
       <View style={styles.root}>
         <View style={styles.container}>
           <Image style={styles.logoImage} source={logo}></Image>
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} />
-            <Ionic name='search' size={25} color='#858585' style={styles.searchIcon}/>
-          </View>
         </View>
         <ScrollView overScrollMode='never'>
           <View style={styles.containerCards}>
