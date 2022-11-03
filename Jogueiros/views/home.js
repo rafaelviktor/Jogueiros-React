@@ -11,14 +11,13 @@ function Home({ navigation }) {
   const ANUNCIOS_URL = '/anuncios';
 
   const [anuncios, setAnunciosObj] = useState({});
+  const [pesquisa, setPesquisa] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
       const response = await api.get(ANUNCIOS_URL,{
-        headers: {'Content-Type':'application/json','token':`${token}`},
-        withCredentials: true
+        headers: {'Content-Type':'application/json'}
       });
       if(response.data.success === true) {
         setAnunciosObj(response.data.result)
@@ -39,7 +38,7 @@ function Home({ navigation }) {
         <View style={styles.container}>
           <Image style={styles.logoImage} source={logo}></Image>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} />
+            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} onChangeText={text => setPesquisa(text)} value={pesquisa} />
             <Ionic name='search' size={25} color='#858585' style={styles.searchIcon}/>
           </View>
         </View>

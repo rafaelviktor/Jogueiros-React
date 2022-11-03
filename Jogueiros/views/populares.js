@@ -16,19 +16,15 @@ function Populares({ navigation }) {
 
   const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('token');
       const response = await api.get(ANUNCIOS_URL,{
-        headers: {'Content-Type':'application/json','token':`${token}`},
-        withCredentials: true
+        headers: {'Content-Type':'application/json'}
       });
       if(response.data.success === true) {
         setAnunciosObj(response.data.result)
         setIsAuthenticated(true)
       }
     } catch (err) {
-      setIsAuthenticated(false);
-      navigation.goBack();
-      await AsyncStorage.setItem('token', '');
+      console.log(err)
     }
     setIsLoading(false)
   }
