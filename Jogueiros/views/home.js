@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useIsFocused } from "@react-navigation/native";
-import { StyleSheet, View, ScrollView, Text, TextInput, Image, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TextInput, Image, Pressable, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
 import Ionic from 'react-native-vector-icons/Ionicons';
 import logo from '../assets/jogueiros-logo.png';
 import api from '../assets/api/axios';
@@ -8,6 +8,7 @@ import api from '../assets/api/axios';
 function Home({ navigation }) {
   const isFocused = useIsFocused();
   const ANUNCIOS_URL = '/anuncios';
+  const PESQUISA_URL = '/anuncios/pesquisa';
 
   const [anuncios, setAnunciosObj] = useState({});
   const [pesquisa, setPesquisa] = useState('');
@@ -31,14 +32,33 @@ function Home({ navigation }) {
     getToken();
   },[isFocused])
 
+  const getPesquisa = async () => {
+    setIsLoading(true)
+    try {
+      const response = await api.get(PESQUISA_URL,{
+        headers: {'Content-Type':'application/json'}, params: { q: pesquisa}
+      });
+      if(response.data.success === true) {
+        setAnunciosObj(response.data.result)
+      }
+    } catch (err) {
+      navigation.goBack();
+    }
+    setIsLoading(false)
+  }
+
   if(isLoading === false) {
     return (
       <View style={styles.root}>
         <View style={styles.container}>
           <Image style={styles.logoImage} source={logo}></Image>
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} onChangeText={text => setPesquisa(text)} value={pesquisa} />
-            <Ionic name='search' size={25} color='#858585' style={styles.searchIcon}/>
+            <TextInput placeholder='Algum local de preferência?' style={styles.inputpesquisa} onChangeText={text => setPesquisa(text)} value={pesquisa} onSubmitEditing={getPesquisa} />
+            <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)} onPress={getPesquisa}>
+              <View>
+                <Ionic name='search' size={25} color='#858585' style={styles.searchIcon}/>
+              </View>
+            </TouchableNativeFeedback>
           </View>
         </View>
         <ScrollView overScrollMode='never'>
@@ -100,18 +120,13 @@ function Home({ navigation }) {
       backgroundColor: '#fff',
     },
     searchIcon: {
-      padding: 10,
-      backgroundColor: '#EAEAEA',
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10
+      padding: 10
     },
     inputpesquisa: {
       flex: 1,
-      padding: 10,
-      backgroundColor: '#EAEAEA',
-      color: '#424242',
-      borderTopLeftRadius: 10,
-      borderBottomLeftRadius: 10
+      padding: 8,
+      borderBottomWidth: 2,
+      borderBottomColor: '#1a9946'
     },
     containerCards: {
       marginLeft: 18,
