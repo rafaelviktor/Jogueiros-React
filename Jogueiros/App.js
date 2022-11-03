@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import Anuncio from './views/anuncio';
+import Reservar from './views/reservar';
 import Cadastrar from './views/cadastrar';
 import EditarPerfil from './views/editar-perfil';
 import MeusAnuncios from './views/meus-anuncios';
@@ -28,6 +29,7 @@ function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="Anúncio" component={Anuncio} />
+          <Stack.Screen name="Agendar reserva" component={Reservar} />
           <Stack.Screen name="Cadastrar" component={Cadastrar} />
           <Stack.Screen name="Editar perfil" component={EditarPerfil} />
           <Stack.Screen name="Meus anúncios" component={MeusAnuncios} />
