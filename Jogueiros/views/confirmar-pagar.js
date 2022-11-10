@@ -92,7 +92,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <Text style={styles.cardTitle}>Informações de preço</Text>
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
-                      <Text style={styles.textMuted}>{dadosAnuncio.preco},00 x {QtdHoras} Hora(s)</Text>
+                      <Text style={styles.textMuted}>{dadosAnuncio.preco},00 x {QtdHoras} Hora{QtdHoras === 1 ? "" : "s"}</Text>
                     </View>
                       <View style={{justifyContent: 'center'}}>
                         <Text style={styles.textMuted}>{ValorHoras},00</Text>
