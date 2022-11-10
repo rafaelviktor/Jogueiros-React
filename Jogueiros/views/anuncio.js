@@ -75,7 +75,7 @@ function Anuncio({ route, navigation }) {
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardPrice}>{anuncio.preco} R$ /hora</Text>
-            <Button type='booking' title='Reservar' onpress={() => navigation.navigate('Agendar reserva', { id_anuncio: route.params.id_anuncio, preco: anuncio.preco })}/>
+            <Button type='booking' title='Reservar' onpress={() => navigation.navigate('Agendar reserva', { dadosAnuncio: JSON.stringify(anuncio) })}/>
           </View>
         </View>
       </View>
