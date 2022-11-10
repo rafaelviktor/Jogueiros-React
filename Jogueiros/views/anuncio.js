@@ -52,7 +52,7 @@ function Anuncio({ route, navigation }) {
                 <View style={styles.container}>
                   <View>
                     <Text style={styles.cardTitle}>{anuncio.titulo}</Text>
-                    <Text style={styles.cardMuted}>{anuncio.logradouro}{anuncio.numero ? ", "+anuncio.numero : ""}</Text>
+                    <Text style={styles.cardMuted}>{anuncio.logradouro}{anuncio.numero ? ", "+anuncio.numero : ""} - {anuncio.cidade}/{anuncio.estado}</Text>
                   </View>
                   <View style={styles.hr} />
                   <View style={{marginTop: 20}}>
