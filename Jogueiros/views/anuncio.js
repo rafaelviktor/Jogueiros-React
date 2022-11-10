@@ -81,12 +81,12 @@ function Anuncio({ route, navigation }) {
                     <Text style={styles.cardText}>{anuncio.descricao}</Text>
                   </View>
                   <View style={styles.hr} />
-                  <View style={{marginTop: 20}}>
+                  <View style={{marginTop: 20, marginBottom: 20}}>
                     <Text style={styles.cardTitle}>Anunciante</Text>
                     <Text style={styles.cardText}>{anunciante.nome}</Text>
                     <Text style={styles.cardSubtitle}>Contatos:</Text>
                     <Text style={styles.cardText}>{anunciante.email}</Text>
-                    <Text style={styles.cardText}>{anunciante.contato}</Text>
+                    <Text style={styles.cardText}>({String(anunciante.contato).substring(0,2)}) {String(anunciante.contato).substring(2,7)}-{String(anunciante.contato).substring(7,11)}</Text>
                   </View>
                 </View>
               </View>
