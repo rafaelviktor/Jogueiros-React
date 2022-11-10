@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Pressable, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Pressable, Image, ActivityIndicator, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
 
 function Anuncio({ route, navigation }) {
+  const PERFIL_URL = '/perfil';
   const ANUNCIO_URL = `/anuncios/${route.params.id_anuncio}`;
   const ANUNCIANTE_URL = `/users/${route.params.id_anunciante}`;
 
   const [anuncio, setAnuncioObj] = useState([]);
   const [anunciante, setAnuncianteObj] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const getToken = async () => {
+  const getAnuncio = async () => {
     try {
       const response = await api.get(ANUNCIO_URL,{
         headers: {'Content-Type':'application/json'}
@@ -37,8 +40,26 @@ function Anuncio({ route, navigation }) {
     setIsLoading(false)
   }
 
+  const Reservar = async () => {
+    // checar primeiro se está autenticado e se o token é válido, se sim entra na tela de reserva, senão, rejeita.
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await api.get(PERFIL_URL,{
+        headers: {'Content-Type':'application/json','token':`${token}`},
+        withCredentials: true
+      });
+      if(response.data.success === true) {
+        navigation.navigate('Agendar reserva', { dadosAnuncio: JSON.stringify(anuncio) })
+      }
+    } catch (err) {
+      navigation.goBack();
+      alert('É necessário fazer login para reservar.')
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
-    getToken();
+    getAnuncio();
   },[])
 
   if(isLoading === false) {
@@ -75,7 +96,7 @@ function Anuncio({ route, navigation }) {
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardPrice}>{anuncio.preco} R$ /hora</Text>
-            <Button type='booking' title='Reservar' onpress={() => navigation.navigate('Agendar reserva', { dadosAnuncio: JSON.stringify(anuncio) })}/>
+            <Button type='booking' title='Reservar' onpress={Reservar}/>
           </View>
         </View>
       </View>
