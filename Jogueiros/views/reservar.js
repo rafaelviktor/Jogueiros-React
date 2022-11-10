@@ -3,44 +3,16 @@ import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../assets/components/button';
-import api from '../assets/api/axios';
 import moment from "moment";
 
 function Reservar({ route, navigation }) {
-  const RESERVAR_URL = '/reservas/criar';
-  const idAnuncio = route.params.id_anuncio;
+  const dadosAnuncio = JSON.parse(route.params.dadosAnuncio);
 
   // configurações do datepicker
 
   const [dataReserva, setDataReserva] = useState(new Date());
   const [horaInicio, setHoraInicio] = useState(zerarMinutos(new Date()));
   const [horaFinal, setHoraFinal] = useState(adicionarHoras(new Date(), 3));
-
-  const AgendarReserva = async () => {
-    const data = {
-        id_anuncio: idAnuncio,
-        data_reserva: dataReserva,
-        hora_inicio: horaInicio,
-        hora_final: horaFinal
-      }
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await api.post(RESERVAR_URL,JSON.stringify(data),
-          {
-            headers: {'Content-Type':'application/json','token':`${token}`},
-            withCredentials: true
-          });
-          if(response.data.success === true) {
-            alert(response.data.message)
-          } else if(response?.data.success === false) {
-            navigation.goBack();
-          } else {
-            navigation.goBack();
-          }
-      } catch (err) {
-          navigation.goBack();
-      }
-  }
 
   function zerarMinutos(date) {
     date.setMinutes(0);
@@ -73,14 +45,6 @@ function Reservar({ route, navigation }) {
     const currentDate = selectedDate;
     setShowFinal(false);
     setHoraFinal(currentDate);
-  };
-
-  const showMode = (currentMode) => {
-    if (Platform.OS === 'android') {
-      setShow(false);
-      // for iOS, add a button that closes the picker
-    }
-    setMode(currentMode);
   };
 
   const showDatepicker = () => {
@@ -147,8 +111,8 @@ function Reservar({ route, navigation }) {
         </ScrollView>
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.cardPrice}>{route.params.preco} R$ /hora</Text>
-            <Button type='mini' title='Continuar' onpress={() => console.log('reservar')} style={{ width: '40%' }}/>
+            <Text style={styles.cardPrice}>{dadosAnuncio.preco} R$ /hora</Text>
+            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }})}/>
           </View>
         </View>
       </View>
