@@ -16,6 +16,12 @@ const Button = ({ title, type = 'primary' , onpress }) => {
                 <Text style={styles[`text_${type}`]}>{title}</Text>
             </TouchableOpacity>
         )
+    } else if(type === 'time') {
+        return (
+            <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
+                <Text style={styles[`text_${type}`]}>{title}</Text>
+            </TouchableOpacity>
+        )
     } else {
         return (
             <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
@@ -71,6 +77,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10
     },
+    button_date: {
+        display: 'flex', 
+        flexDirection: 'row',
+        backgroundColor: '#1a9946',
+        width: '60%',
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
+    button_time: {
+        display: 'flex', 
+        flexDirection: 'row',
+        backgroundColor: '#1a9946',
+        width: '35%',
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    },
     text_primary: {
         color: 'white',
         fontSize: 18,
@@ -94,6 +120,16 @@ const styles = StyleSheet.create({
     text_mini: {
         color: 'white',
         fontSize: 18,
+        fontWeight: 'bold'
+    },
+    text_date: {
+        color: 'white',
+        fontSize: 35,
+        fontWeight: 'bold'
+    },
+    text_time: {
+        color: 'white',
+        fontSize: 35,
         fontWeight: 'bold'
     },
 })
