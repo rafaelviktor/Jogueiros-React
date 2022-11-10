@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import DatePicker from 'react-native-modern-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
+import moment from "moment";
 
 function Reservar({ route, navigation }) {
   const RESERVAR_URL = '/reservas/criar';
   const idAnuncio = route.params.id_anuncio;
 
   // configurações do datepicker
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [time, setTime] = useState('');
 
-  const [dataReserva, setDataReserva] = useState('');
-  const [horaInicio, setHoraInicio] = useState('');
-  const [horaFinal, setHoraFinal] = useState('');
+  const [dataReserva, setDataReserva] = useState(new Date());
+  const [horaInicio, setHoraInicio] = useState(zerarMinutos(new Date()));
+  const [horaFinal, setHoraFinal] = useState(adicionarHoras(new Date(), 3));
 
   const AgendarReserva = async () => {
     const data = {
@@ -43,37 +42,107 @@ function Reservar({ route, navigation }) {
       }
   }
 
+  function zerarMinutos(date) {
+    date.setMinutes(0);
+    return new Date(date);
+  }
+
+  function adicionarHoras(date, hours) {
+    date.setHours(date.getHours() + hours);
+    date.setMinutes(0);
+    return new Date(date);
+  }
+
+  const [showData, setShowData] = useState(false);
+  const [showInicio, setShowInicio] = useState(false);
+  const [showFinal, setShowFinal] = useState(false);
+
+  const onChangeData = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShowData(false);
+    setDataReserva(currentDate);
+  };
+
+  const onChangeHInicio = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShowInicio(false);
+    setHoraInicio(currentDate);
+  };
+
+  const onChangeHFinal = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShowFinal(false);
+    setHoraFinal(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(false);
+      // for iOS, add a button that closes the picker
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    setShowData(true)
+  };
+
+  const showStartTime = () => {
+    setShowInicio(true)
+  };
+
+  const showEndTime = () => {
+    setShowFinal(true)
+  };
+
     return (
       <View style={styles.root}>
         <ScrollView overScrollMode='never'>
           <View>
-            {
               <View>
                 <View style={styles.container}>
                   <View style={{marginTop: 20}}>
                     <Text style={styles.cardTitle}>Data da reserva</Text>
-                    <DatePicker
-                        onSelectedChange={date => setSelectedDate(date)}
-                        mode="calendar"
-                    />
+                    <Text style={styles.cardText}>Selecione para alterar:</Text>
+                    <Button type='date' onpress={showDatepicker} title={moment(dataReserva).format("DD/MM/YYYY")} />
+                    {showData && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={dataReserva}
+                        mode='date'
+                        is24Hour={true}
+                        onChange={onChangeData}
+                      />
+                    )}
                   </View>
                   <View style={styles.hr} />
                   <View style={{marginTop: 20}}>
                     <Text style={styles.cardTitle}>Horários</Text>
-                    <Text>Início</Text>
-                    <DatePicker
-                        onTimeChange={selectedTime => setTime(selectedTime)}
-                        mode="time"
-                    />
-                    <Text>Final</Text>
-                    <DatePicker
-                        onTimeChange={selectedTime => setTime(selectedTime)}
-                        mode="time"
-                    />
+                    <Text style={styles.cardText}>Selecione o horário de início da reserva:</Text>
+                    <Button type='time' onpress={showStartTime} title={moment(horaInicio).format("HH:mm")} />
+                    {showInicio && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={horaInicio}
+                        mode='time'
+                        is24Hour={true}
+                        onChange={onChangeHInicio}
+                      />
+                    )}
+                    <Text style={styles.cardText}>Selecione o horário de término da reserva:</Text>
+                    <Button type='time' onpress={showEndTime} title={moment(horaFinal).format("HH:mm")} />
+                    {showFinal && (
+                      <DateTimePicker
+                        testID="dateTimePicker"
+                        value={horaFinal}
+                        mode='time'
+                        is24Hour={true}
+                        onChange={onChangeHFinal}
+                      />
+                    )}
                   </View>
                 </View>
               </View>
-            }
           </View>
         </ScrollView>
         <View style={styles.footer}>
@@ -141,7 +210,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   cardText: {
-    marginTop: 5,
+    marginTop: 15,
+    marginBottom: 15,
     fontSize: 17
   },
   cardPrice: {
