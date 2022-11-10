@@ -3,14 +3,21 @@ import { StyleSheet, View, Text, ScrollView, Image, TouchableNativeFeedback } fr
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
+import moment from "moment";
 
 function ConfirmarReserva({ route, navigation }) {
   const RESERVAR_URL = '/reservas/criar';
   const dadosAnuncio = JSON.parse(route.params.anuncio);
   const dadosReserva = route.params.reserva;
+  const dadosCartao = route.params.cartao;
 
-  // cálculo despesas
-  let QtdHoras = 1;
+  // tratamento das datas da reserva
+  let data = moment(new Date(Date.parse(dadosReserva.data))).format("DD/MM/YYYY")
+  let horaInicio = moment(new Date(Date.parse(dadosReserva.inicio))).format("HH")
+  let horaFinal = moment(new Date(Date.parse(dadosReserva.final))).format("HH")
+
+  // cálculo custos da reserva
+  let QtdHoras = parseInt(horaFinal) - parseInt(horaInicio);
   let TaxaServico = 14;
   let ValorHoras = dadosAnuncio.preco * QtdHoras;
   let ValorTotal = ValorHoras + TaxaServico;
@@ -60,7 +67,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Data</Text>
-                      <Text style={styles.textMuted}>03/02/2022</Text>
+                      <Text style={styles.textMuted}>{data}</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
@@ -71,7 +78,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Horário</Text>
-                      <Text style={styles.textMuted}>20h às 21h</Text>
+                      <Text style={styles.textMuted}>{horaInicio}h às {horaFinal}h</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
@@ -114,7 +121,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Cartão de Crédito</Text>
-                      <Text style={styles.textMuted}>Mastercard **** 2289</Text>
+                      <Text style={styles.textMuted}>Mastercard **** {dadosCartao.numero.substring(15,19)}</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
