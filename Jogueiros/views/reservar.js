@@ -12,6 +12,7 @@ function Reservar({ route, navigation }) {
   const [dataReserva, setDataReserva] = useState(new Date());
   const [horaInicio, setHoraInicio] = useState(zerarMinutos(new Date()));
   const [horaFinal, setHoraFinal] = useState(adicionarHoras(new Date(), 3));
+  const [parcelas, setParcelas] = useState(new Date());
 
   function zerarMinutos(date) {
     date.setMinutes(0);

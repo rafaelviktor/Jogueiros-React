@@ -1496,6 +1496,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-community/checkbox@^0.5.9":
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.14.tgz#54269f23ba966dbc6593ac121ad475c4c562d6c0"
+  integrity sha512-UmGf3wBpoCXLmVRKIDZyzOG+QR1fOhm0FOw4KzxHTCXpsBvZgIn5wbJ+MWk4io5RohQdY8GSX2MYFmkPJeJpeA==
+
 "@react-native-community/cli-clean@^8.0.4":
   version "8.0.4"
   resolved "https://registry.npmjs.org/@react-native-community/cli-clean/-/cli-clean-8.0.4.tgz"
@@ -5512,6 +5517,13 @@ react-native-gradle-plugin@^0.0.7:
   version "0.0.7"
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.7.tgz"
   integrity sha512-+4JpbIx42zGTONhBTIXSyfyHICHC29VTvhkkoUOJAh/XHPEixpuBduYgf6Y4y9wsN1ARlQhBBoptTvXvAFQf5g==
+
+react-native-input-select@^0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/react-native-input-select/-/react-native-input-select-0.18.0.tgz#c980ad6ce9113ea8ecfee871b72def5ec8035df8"
+  integrity sha512-1VhxYYwsCyYdojuW+FNBIHD6h1EyyqXu9WMKZvespLKYDtD4SDoplzDjBsTW8+nv/yGi8e7park4b1J4VEZQkw==
+  dependencies:
+    "@react-native-community/checkbox" "^0.5.9"
 
 react-native-masked-text@^1.13.0:
   version "1.13.0"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, Text, ScrollView, Image, TouchableNativeFeedback } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
@@ -21,6 +21,8 @@ function ConfirmarReserva({ route, navigation }) {
   let TaxaServico = 14;
   let ValorHoras = dadosAnuncio.preco * QtdHoras;
   let ValorTotal = ValorHoras + TaxaServico;
+  //adicionando valor total a reserva
+  Object.assign(dadosReserva, {valor: ValorTotal})
 
   const AgendarReserva = async () => {
     const data = {
@@ -135,7 +137,7 @@ function ConfirmarReserva({ route, navigation }) {
         </ScrollView>
         <View style={styles.footer}>
           <View>
-            <Button type='payment' title='Confirmar e pagar' onpress={() => console.log('reservar')} style={{ width: '40%' }}/>
+            <Button type='payment' title='Confirmar e pagar' onpress={() => navigation.navigate('Resumo reserva', { reserva: dadosReserva, cartao: dadosCartao, anuncio: dadosAnuncio })} style={{ width: '40%' }}/>
           </View>
         </View>
       </View>

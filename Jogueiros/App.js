@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import Anuncio from './views/anuncio';
 import Reservar from './views/reservar';
 import ConfirmarPagar from './views/confirmar-pagar';
+import ResumoReserva from './views/resumo-reserva';
 import Cadastrar from './views/cadastrar';
 import EditarPerfil from './views/editar-perfil';
 import MeusAnuncios from './views/meus-anuncios';
@@ -24,18 +25,15 @@ function App() {
     <NavigationContainer>
       <StatusBar style="dark" />
       <Stack.Navigator>
-        <Stack.Screen
-            name="Root"
-            component={Root}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="Anúncio" component={Anuncio} />
-          <Stack.Screen name="Agendar reserva" component={Reservar} />
-          <Stack.Screen name="Confirmar e pagar" component={ConfirmarPagar} />
-          <Stack.Screen name="Cadastrar" component={Cadastrar} />
-          <Stack.Screen name="Editar perfil" component={EditarPerfil} />
-          <Stack.Screen name="Meus anúncios" component={MeusAnuncios} />
-          <Stack.Screen name="Minhas reservas" component={MinhasReservas} />
+        <Stack.Screen name="Root" component={Root} options={{ headerShown: false }} />
+        <Stack.Screen name="Anúncio" component={Anuncio} />
+        <Stack.Screen name="Agendar reserva" component={Reservar} />
+        <Stack.Screen name="Confirmar e pagar" component={ConfirmarPagar} />
+        <Stack.Screen name="Resumo reserva" component={ResumoReserva} options={{ headerShown: false }} />
+        <Stack.Screen name="Cadastrar" component={Cadastrar} />
+        <Stack.Screen name="Editar perfil" component={EditarPerfil} />
+        <Stack.Screen name="Meus anúncios" component={MeusAnuncios} />
+        <Stack.Screen name="Minhas reservas" component={MinhasReservas} />
       </Stack.Navigator>
     </NavigationContainer>
   );
