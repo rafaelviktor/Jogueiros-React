@@ -16,8 +16,20 @@ function ConfirmarReserva({ route, navigation }) {
   let horaInicio = moment(new Date(Date.parse(dadosReserva.inicio))).format("HH")
   let horaFinal = moment(new Date(Date.parse(dadosReserva.final))).format("HH")
 
+  // função de calcular Horas
+  function calcularHoras(hInicio, hFinal) {
+    let horas = parseInt(hFinal) - parseInt(hInicio);
+    if(horas === 0) {
+      return 24;
+    } else if(horas < 0) {
+      return 24 - Math.abs(horas);
+    } else {
+      return horas;
+    }
+  }
+
   // cálculo custos da reserva
-  let QtdHoras = parseInt(horaFinal) - parseInt(horaInicio);
+  let QtdHoras = calcularHoras(horaInicio, horaFinal);
   let TaxaServico = 14;
   let ValorHoras = dadosAnuncio.preco * QtdHoras;
   let ValorTotal = ValorHoras + TaxaServico;
