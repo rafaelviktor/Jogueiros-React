@@ -29,6 +29,12 @@ const Button = ({ title, type = 'primary' , onpress }) => {
                 <Text style={styles[`text_${type}`]}>{title}</Text>
             </TouchableOpacity>
         )
+    } else if(type === 'muted') {
+        return (
+            <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
+                <Text style={styles[`text_${type}`]}>{title}</Text>
+            </TouchableOpacity>
+        )
     } else {
         return (
             <TouchableOpacity style={styles[`button_${type}`]} onPress={onpress}>
@@ -63,6 +69,16 @@ const styles = StyleSheet.create({
         height: 25,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    button_muted: {
+        backgroundColor: '#FFFFFF',
+        borderWidth: 2,
+        borderColor: '#dddfe0',
+        width: '100%',
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
     },
     button_booking: {
         display: 'flex', 
@@ -127,6 +143,11 @@ const styles = StyleSheet.create({
     text_tertiary: {
         color: '#1a9946',
         fontSize: 13,
+        fontWeight: 'bold'
+    },
+    text_muted: {
+        color: '#414549',
+        fontSize: 18,
         fontWeight: 'bold'
     },
     text_booking: {

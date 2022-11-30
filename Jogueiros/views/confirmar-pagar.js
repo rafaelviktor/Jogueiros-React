@@ -1,24 +1,62 @@
-import React from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TouchableNativeFeedback } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, Image, TouchableNativeFeedback, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../assets/components/button';
 import api from '../assets/api/axios';
 import moment from "moment";
 
 function ConfirmarReserva({ route, navigation }) {
+  // dados ficticios cartoes
+  const BancoCartoes = [
+    {
+        "id": 1,
+        "numero": "4234 4567 8765 2222",
+        "cvv": "123",
+        "vencimento": "12/24",
+        "titular": "Caio Barroso",
+        "bandeira": "Visa"
+    },
+    {
+        "id": 2,
+        "numero":  "6224 4337 8365 1111",
+        "cvv": "100",
+        "vencimento": "12/28",
+        "titular": "Marcelo",
+        "bandeira": "Hiper"
+    },
+    {
+        "id": 3,
+        "numero": "5225 2340 6776 1298",
+        "cvv": "200",
+        "vencimento": "05/29",
+        "titular": "Rafael",
+        "bandeira": "Mastercard"
+
+    },
+    {
+        "id": 4,
+        "numero": "3515 2345 6666 1278",
+        "cvv": "908",
+        "vencimento": "10/30",
+        "titular": "Lucas",
+       "bandeira": "Elo"
+    }
+]
+
+  const [isLoading, setIsLoading] = useState(false);
   const RESERVAR_URL = '/reservas/criar';
   const dadosAnuncio = JSON.parse(route.params.anuncio);
   const dadosReserva = route.params.reserva;
   const dadosCartao = route.params.cartao;
 
   // tratamento das datas da reserva
-  let data = moment(new Date(Date.parse(dadosReserva.data))).format("DD/MM/YYYY")
-  let horaInicio = moment(new Date(Date.parse(dadosReserva.inicio))).format("HH")
-  let horaFinal = moment(new Date(Date.parse(dadosReserva.final))).format("HH")
+  let dataReserva = moment(new Date(Date.parse(dadosReserva.data))).format("DD/MM/YYYY")
+  let horaInicio = moment(new Date(Date.parse(dadosReserva.inicio))).format("HH:mm")
+  let horaFinal = moment(new Date(Date.parse(dadosReserva.final))).format("HH:mm")
 
   // função de calcular Horas
   function calcularHoras(hInicio, hFinal) {
-    let horas = parseInt(hFinal) - parseInt(hInicio);
+    let horas = parseInt(hFinal.substring(0,2)) - parseInt(hInicio.substring(0,2));
     if(horas === 0) {
       return 24;
     } else if(horas < 0) {
@@ -37,31 +75,51 @@ function ConfirmarReserva({ route, navigation }) {
   Object.assign(dadosReserva, {valor: ValorTotal})
 
   const AgendarReserva = async () => {
-    const data = {
-        id_anuncio: idAnuncio,
-        data_reserva: dataReserva,
-        hora_inicio: horaInicio,
-        hora_final: horaFinal
-      }
-      try {
-        const token = await AsyncStorage.getItem('token');
-        const response = await api.post(RESERVAR_URL,JSON.stringify(data),
-          {
-            headers: {'Content-Type':'application/json','token':`${token}`},
-            withCredentials: true
-          });
-          if(response.data.success === true) {
-            alert(response.data.message)
-          } else if(response?.data.success === false) {
-            navigation.goBack();
-          } else {
-            navigation.goBack();
+    for(let i = 0; i < BancoCartoes.length; i++) {
+      if(BancoCartoes[i].numero == dadosCartao.numero) {
+        console.log('número do cartão igual')
+        if(BancoCartoes[i].cvv == dadosCartao.cvv) {
+          console.log('cvv do cartão igual')
+          if(BancoCartoes[i].bandeira == dadosCartao.bandeira) {
+            console.log('bandeira do cartão igual')
+            if(BancoCartoes[i].titular == dadosCartao.titular) {
+              console.log('titular do cartão igual')
+              if(BancoCartoes[i].vencimento == dadosCartao.vencimento) {
+                console.log('vencimento do cartão igual')
+                const data = {
+                  id_anuncio: dadosAnuncio._id,
+                  data_reserva: dataReserva,
+                  hora_inicio: horaInicio,
+                  hora_final: horaFinal
+                }
+                try {
+                  const token = await AsyncStorage.getItem('token');
+                  const response = await api.post(RESERVAR_URL,JSON.stringify(data),
+                    {
+                      headers: {'Content-Type':'application/json','token':`${token}`},
+                      withCredentials: true
+                    });
+                    if(response.data.success === true) {
+                      navigation.navigate('Resumo reserva', { reserva: dadosReserva, cartao: dadosCartao, sucesso: true })
+                    } else if(response?.data.success === false) {
+                      navigation.goBack();
+                    } else {
+                      navigation.goBack();
+                    }
+                } catch (err) {
+                    navigation.goBack();
+                }
+                break;
+              }
+            }
           }
-      } catch (err) {
-          navigation.goBack();
+        }
+      } else {
+        navigation.navigate('Resumo reserva', { reserva: dadosReserva, cartao: dadosCartao, sucesso: false })
       }
+    }
   }
-
+  if(isLoading === false) {
     return (
       <View style={styles.root}>
         <ScrollView overScrollMode='never'>
@@ -81,7 +139,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Data</Text>
-                      <Text style={styles.textMuted}>{data}</Text>
+                      <Text style={styles.textMuted}>{dataReserva}</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
@@ -135,7 +193,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Cartão de Crédito</Text>
-                      <Text style={styles.textMuted}>Mastercard **** {dadosCartao.numero.substring(15,19)}</Text>
+                      <Text style={styles.textMuted}>{dadosCartao.bandeira} **** {dadosCartao.numero.substring(15,19)}</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
@@ -149,11 +207,18 @@ function ConfirmarReserva({ route, navigation }) {
         </ScrollView>
         <View style={styles.footer}>
           <View>
-            <Button type='payment' title='Confirmar e pagar' onpress={() => navigation.navigate('Resumo reserva', { reserva: dadosReserva, cartao: dadosCartao, anuncio: dadosAnuncio })} style={{ width: '40%' }}/>
+            <Button type='payment' title='Confirmar e pagar' onpress={() => AgendarReserva()} style={{ width: '40%' }}/>
           </View>
         </View>
       </View>
-    );
+    )
+    } else {
+      return (
+      <View style={styles.center}>
+        <ActivityIndicator color={"#1a9946"} size={60} />
+        <Text style={{color: '#1a9946', fontWeight: 'bold', fontSize: 18, padding: 20}}>Processando pagamento...</Text>
+      </View>)
+    }
 }
 
 const styles = StyleSheet.create({

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Image, TouchableNativeFeedback, BackHandler, Alert } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Image, BackHandler, ActivityIndicator } from 'react-native';
 import Button from '../assets/components/button';
 import logo from '../assets/jogueiros-logo.png';
 
 function ResumoReserva({ route, navigation }) {
-    const dadosAnuncio = route.params.anuncio;
     const dadosReserva = route.params.reserva;
     const dadosCartao = route.params.cartao;
+    const sucesso = route.params.sucesso;
 
-    console.log(dadosAnuncio)
-    console.log(dadosReserva)
-    console.log(dadosCartao)
+    setTimeout(() => {
+      console.log(sucesso);
+      setIsLoading(false)
+    }, 3000)
+
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const backAction = () => {
@@ -26,35 +29,81 @@ function ResumoReserva({ route, navigation }) {
         return () => backHandler.remove();
       }, []);
 
-    return (
-      <View style={styles.root}>
-        <View style={styles.header}>
-          <Image style={styles.logoImage} source={logo}></Image>
-        </View>
-        <Text style={styles.pageTitle}>Reserva efetuada com sucesso</Text>
-        <ScrollView style={{paddingBottom: 12}} overScrollMode='never' contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
-            <View style={styles.container}>
-                <View>
-                    <Text style={styles.cardTitle}>Detalhes da transação</Text>
-                    <View style={styles.hr} />
-                        <View style={styles.containerDetails}>
-                            <Text style={styles.cardTitle}>Autenticação: {Math.random().toString(36).slice(2)}</Text>
-                            <Text style={styles.cardTitle}>Valor Final: {dadosReserva.valor},00</Text>
-                            <Text style={styles.cardTitle}>Número de Parcelas: {'2'}</Text>
-                            <Text style={styles.cardTitle}>Cartão: {dadosCartao.numero.substring(0,2)}** **** **** {dadosCartao.numero.substring(15,19)}</Text>
-                            <Text style={styles.cardTitle}>Bandeira: Mastercard</Text>
-                        </View>
-                    <View style={styles.hr} />
-                </View>
+    if(isLoading === false) {
+      if(sucesso === true) {
+        return (
+          <View style={styles.root}>
+            <View style={styles.header}>
+              <Image style={styles.logoImage} source={logo}></Image>
             </View>
-          </ScrollView>
-        <View style={styles.footer}>
-          <View>
-            <Button title='Voltar ao início' onpress={() => navigation.popToTop()} style={{ width: '40%' }}/>
+            <Text style={styles.pageTitle}>Reserva efetuada com sucesso</Text>
+            <ScrollView style={{paddingBottom: 12}} overScrollMode='never' contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <View style={styles.container}>
+                    <View>
+                        <Text style={styles.cardTitle}>Detalhes da transação</Text>
+                        <View style={styles.hr} />
+                            <View style={styles.containerDetails}>
+                                <Text style={styles.cardTitle}>Autenticação: {Math.random().toString(36).slice(2)}</Text>
+                                <Text style={styles.cardTitle}>Valor Final: {dadosReserva.valor},00</Text>
+                                <Text style={styles.cardTitle}>Número de Parcelas: {'2'}</Text>
+                                <Text style={styles.cardTitle}>Cartão: {dadosCartao.numero.substring(0,2)}** **** **** {dadosCartao.numero.substring(15,19)}</Text>
+                                <Text style={styles.cardTitle}>Bandeira: {dadosCartao.bandeira}</Text>
+                            </View>
+                        <View style={styles.hr} />
+                    </View>
+                </View>
+              </ScrollView>
+            <View style={styles.footer}>
+              <View>
+                <Button title='Voltar ao início' onpress={() => navigation.popToTop()} style={{ width: '40%' }}/>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    );
+        )
+      } else {
+        return (
+          <View style={styles.root}>
+            <View style={styles.header}>
+              <Image style={styles.logoImage} source={logo}></Image>
+            </View>
+            <Text style={styles.pageBadTitle}>Não foi possível finalizar sua reserva</Text>
+            <ScrollView style={{paddingBottom: 12}} overScrollMode='never' contentContainerStyle={{ flexGrow: 1, justifyContent: 'center' }}>
+                <View style={styles.container}>
+                    <View>
+                        <Text style={styles.cardTitle}>Motivo da falha</Text>
+                        <View style={styles.hr} />
+                            <View style={styles.containerDetails}>
+                                <Text style={styles.cardTitle}>A compra não foi autorizada pela administradora do cartão.</Text>
+                            </View>
+                            <View style={styles.hr} />
+                            <View style={styles.containerDetails}>
+                                <Text style={styles.cardTitle}>Valor Final: {dadosReserva.valor},00</Text>
+                                <Text style={styles.cardTitle}>Número de Parcelas: {'2'}</Text>
+                                <Text style={styles.cardTitle}>Cartão: {dadosCartao.numero.substring(0,2)}** **** **** {dadosCartao.numero.substring(15,19)}</Text>
+                                <Text style={styles.cardTitle}>Bandeira: {dadosCartao.bandeira}</Text>
+                            </View>
+                        <View style={styles.hr} />
+                    </View>
+                </View>
+              </ScrollView>
+            <View style={styles.footer}>
+              <View style={{marginBottom: 12}}>
+                <Button title='Alterar dados da reserva' onpress={() => navigation.goBack()}/>
+              </View>
+              <View>
+                <Button type='muted' title='Voltar ao início e cancelar' onpress={() => navigation.popToTop()} />
+              </View>
+            </View>
+          </View>
+          )
+      }
+    } else {
+      return (
+      <View style={styles.center}>
+        <ActivityIndicator color={"#1a9946"} size={60} />
+        <Text style={{color: '#1a9946', fontWeight: 'bold', fontSize: 18, padding: 20}}>Processando pagamento...</Text>
+      </View>)
+    }
 }
 
 const styles = StyleSheet.create({
@@ -117,6 +166,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     backgroundColor: '#1a9946',
+    color: '#FFF',
+    borderRadius: 10,
+    padding: 7,
+    fontWeight: 'bold'
+  },
+  pageBadTitle: {
+    margin: 10,
+    marginBottom: 0,
+    fontSize: 20,
+    textAlign: 'center',
+    backgroundColor: '#DC3545',
     color: '#FFF',
     borderRadius: 10,
     padding: 7,

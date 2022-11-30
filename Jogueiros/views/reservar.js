@@ -12,7 +12,6 @@ function Reservar({ route, navigation }) {
   const [dataReserva, setDataReserva] = useState(new Date());
   const [horaInicio, setHoraInicio] = useState(zerarMinutos(new Date()));
   const [horaFinal, setHoraFinal] = useState(adicionarHoras(new Date(), 3));
-  const [parcelas, setParcelas] = useState(new Date());
 
   function zerarMinutos(date) {
     date.setMinutes(0);
@@ -64,6 +63,22 @@ function Reservar({ route, navigation }) {
   const [cvv, setcvv] = useState('');
   const [vencimento, setVencimento] = useState('');
   const [titular, setTitular] = useState('');
+  const [parcelas, setParcelas] = useState(0);
+
+  // função de verificar a bandeira
+  function checarBandeira(numeroCartao) {
+    if(numeroCartao.substring(0,1) == 4) {
+      return 'Visa'
+    } else if(numeroCartao.substring(0,1) == 5) {
+      return 'Mastercard'
+    } else if(numeroCartao.substring(0,2) == 35) {
+      return 'Elo'
+    } else if(numeroCartao.substring(0,1) == 3) {
+      return 'Diners Club'
+    } else if(numeroCartao.substring(0,1) == 6) {
+      return 'Hiper'
+    }
+  }
 
     return (
       <View style={styles.root}>
@@ -162,7 +177,7 @@ function Reservar({ route, navigation }) {
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardPrice}>{dadosAnuncio.preco} R$ /hora</Text>
-            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, validade: vencimento, cvv: cvv, titular: titular }})}/>
+            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, vencimento: vencimento, cvv: cvv, titular: titular, bandeira: checarBandeira(numero.substring(0,2)) }})}/>
           </View>
         </View>
       </View>
