@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, Pressable, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Pressable, ActivityIndicator, TouchableNativeFeedback, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../assets/api/axios';
 
 function MinhasReservas({ navigation }) {
   const MINHASRESERVAS_URL = '/perfil/minhas-reservas';
+  const EXCLUIR_URL = '/reservas/excluir/';
 
   const [reservas, setReservasObj] = useState([]);
+  const [exclusao, setExclusao] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   const getToken = async () => {
@@ -18,6 +20,7 @@ function MinhasReservas({ navigation }) {
       });
       if(response.data.success === true) {
         setReservasObj(response.data.result)
+        console.log(reservas)
       }
     } catch (err) {
       navigation.goBack();
@@ -28,7 +31,44 @@ function MinhasReservas({ navigation }) {
 
   useEffect(() => {
     getToken();
-  },[])
+  },[exclusao])
+
+  const excluirReserva = async (id) => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const response = await api.delete(EXCLUIR_URL+id,{
+        headers: {'Content-Type':'application/json','token':`${token}`},
+        withCredentials: true
+      });
+      if(response.data.success === true) {
+        Alert.alert("Sucesso",response.data.message)
+        setExclusao(!exclusao)
+      }
+    } catch (err) {
+      alert(err.response.data.message)
+    }
+  }
+
+  function showAlert(id) {
+    Alert.alert(
+      "Excluir reserva",
+      `Tem certeza que deseja excluir? este processo é irreversível e será necessário reagendar em caso de arrependimento. Reserva ID: ${id}`,
+      [
+        {
+          text: "SIM",
+          onPress: () => excluirReserva(id),
+          style: "default"
+        },
+        {
+          text: "NÃO",
+          style: "default"
+        },
+      ],
+      {
+        cancelable: true
+      }
+    );
+  }
 
   if(isLoading === false) {
     if(reservas.length === 0) {
@@ -55,7 +95,7 @@ function MinhasReservas({ navigation }) {
                       <Text style={styles.textNormal}>Data: {item.data_reserva} | Início: {item.hora_inicio} - Final: {item.hora_final}</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
                         <Text style={styles.textMuted}>Data de criação: {item.data_inclusao}</Text>
-                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#f75c5c', true, 26)}>
+                        <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#f75c5c', true, 26)} onPress={() => showAlert(item._id)}>
                           <View>
                             <Text style={styles.textDelete}>EXCLUIR</Text>
                           </View>

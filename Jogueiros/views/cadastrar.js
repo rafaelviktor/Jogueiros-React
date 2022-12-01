@@ -32,13 +32,11 @@ function Cadastrar({ navigation }) {
           AsyncStorage.setItem('@TOKEN', response.data.result)
           navigation.goBack();
           alert(response.data.message)
-        } else if(response?.data.success === false) {
-          navigation.goBack();
         } else {
-          navigation.goBack();
+          alert(response.data.message)
         }
     } catch (err) {
-        navigation.goBack();
+        alert(err.response.data.message)
     }
   }
 
