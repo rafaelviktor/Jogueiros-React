@@ -9,7 +9,6 @@ function ResumoReserva({ route, navigation }) {
     const sucesso = route.params.sucesso;
 
     setTimeout(() => {
-      console.log(sucesso);
       setIsLoading(false)
     }, 3000)
 
@@ -45,7 +44,7 @@ function ResumoReserva({ route, navigation }) {
                             <View style={styles.containerDetails}>
                                 <Text style={styles.cardTitle}>Autenticação: {Math.random().toString(36).slice(2)}</Text>
                                 <Text style={styles.cardTitle}>Valor Final: {dadosReserva.valor},00</Text>
-                                <Text style={styles.cardTitle}>Número de Parcelas: {'2'}</Text>
+                                <Text style={styles.cardTitle}>Número de Parcelas: {dadosCartao.parcelas}</Text>
                                 <Text style={styles.cardTitle}>Cartão: {dadosCartao.numero.substring(0,2)}** **** **** {dadosCartao.numero.substring(15,19)}</Text>
                                 <Text style={styles.cardTitle}>Bandeira: {dadosCartao.bandeira}</Text>
                             </View>
@@ -78,7 +77,7 @@ function ResumoReserva({ route, navigation }) {
                             <View style={styles.hr} />
                             <View style={styles.containerDetails}>
                                 <Text style={styles.cardTitle}>Valor Final: {dadosReserva.valor},00</Text>
-                                <Text style={styles.cardTitle}>Número de Parcelas: {'2'}</Text>
+                                <Text style={styles.cardTitle}>Número de Parcelas: {dadosCartao.parcelas}</Text>
                                 <Text style={styles.cardTitle}>Cartão: {dadosCartao.numero.substring(0,2)}** **** **** {dadosCartao.numero.substring(15,19)}</Text>
                                 <Text style={styles.cardTitle}>Bandeira: {dadosCartao.bandeira}</Text>
                             </View>

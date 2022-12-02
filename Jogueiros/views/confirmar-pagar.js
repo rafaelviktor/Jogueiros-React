@@ -11,7 +11,7 @@ function ConfirmarReserva({ route, navigation }) {
     {
         "id": 1,
         "numero": "4234 4567 8765 2222",
-        "cvv": "123",
+        "cvv": "127",
         "vencimento": "12/24",
         "titular": "Caio Barroso",
         "bandeira": "Visa"
@@ -19,7 +19,7 @@ function ConfirmarReserva({ route, navigation }) {
     {
         "id": 2,
         "numero":  "6224 4337 8365 1111",
-        "cvv": "100",
+        "cvv": "601",
         "vencimento": "12/28",
         "titular": "Marcelo",
         "bandeira": "Hiper"
@@ -27,11 +27,10 @@ function ConfirmarReserva({ route, navigation }) {
     {
         "id": 3,
         "numero": "5225 2340 6776 1298",
-        "cvv": "200",
+        "cvv": "280",
         "vencimento": "05/29",
-        "titular": "Rafael",
+        "titular": "Rafael Viktor",
         "bandeira": "Mastercard"
-
     },
     {
         "id": 4,
@@ -40,7 +39,15 @@ function ConfirmarReserva({ route, navigation }) {
         "vencimento": "10/30",
         "titular": "Lucas",
        "bandeira": "Elo"
-    }
+    },
+    {
+      "id": 5,
+      "numero": "4756 1178 1949 6234",
+      "cvv": "112",
+      "vencimento": "24/30",
+      "titular": "Eduardo",
+      "bandeira": "Visa"
+  }
 ]
 
   const [isLoading, setIsLoading] = useState(false);
@@ -77,15 +84,10 @@ function ConfirmarReserva({ route, navigation }) {
   const AgendarReserva = async () => {
     for(let i = 0; i < BancoCartoes.length; i++) {
       if(BancoCartoes[i].numero == dadosCartao.numero) {
-        console.log('número do cartão igual')
         if(BancoCartoes[i].cvv == dadosCartao.cvv) {
-          console.log('cvv do cartão igual')
           if(BancoCartoes[i].bandeira == dadosCartao.bandeira) {
-            console.log('bandeira do cartão igual')
             if(BancoCartoes[i].titular == dadosCartao.titular) {
-              console.log('titular do cartão igual')
               if(BancoCartoes[i].vencimento == dadosCartao.vencimento) {
-                console.log('vencimento do cartão igual')
                 const data = {
                   id_anuncio: dadosAnuncio._id,
                   data_reserva: dataReserva,
@@ -193,7 +195,7 @@ function ConfirmarReserva({ route, navigation }) {
                   <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 8}}>
                     <View>
                       <Text style={styles.textSubtitle}>Cartão de Crédito</Text>
-                      <Text style={styles.textMuted}>{dadosCartao.bandeira} **** {dadosCartao.numero.substring(15,19)}</Text>
+                      <Text style={styles.textMuted}>{dadosCartao.bandeira} **** {dadosCartao.numero.substring(15,19)} | {dadosCartao.parcelas === 1 ? 'À vista' : `${dadosCartao.parcelas}x sem juros`}</Text>
                     </View>
                     <TouchableNativeFeedback onPress={() => navigation.goBack()} background={TouchableNativeFeedback.Ripple('#CCCCCC', true, 26)}>
                       <View style={{justifyContent: 'center'}}>
