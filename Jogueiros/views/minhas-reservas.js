@@ -8,6 +8,7 @@ function MinhasReservas({ navigation }) {
   const EXCLUIR_URL = '/reservas/excluir/';
 
   const [reservas, setReservasObj] = useState([]);
+  const [anuncio, setAnunciosObj] = useState([]);
   const [exclusao, setExclusao] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,8 +20,8 @@ function MinhasReservas({ navigation }) {
         withCredentials: true
       });
       if(response.data.success === true) {
-        setReservasObj(response.data.result)
-        console.log(reservas)
+        setReservasObj(response.data.result[0])
+        setAnunciosObj(response.data.result[1])
       }
     } catch (err) {
       navigation.goBack();
@@ -92,6 +93,7 @@ function MinhasReservas({ navigation }) {
                     <Text style={styles.status}>{item.status}</Text>
                     </View>
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                      <Text style={styles.textNormal}>{anuncio[index].titulo} | R$ {anuncio[index].preco},00 /h</Text>
                       <Text style={styles.textNormal}>Data: {item.data_reserva} | Início: {item.hora_inicio} - Final: {item.hora_final}</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
                         <Text style={styles.textMuted}>Data de criação: {item.data_inclusao}</Text>
