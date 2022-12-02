@@ -52,16 +52,16 @@ function MinhasReservas({ navigation }) {
 
   function showAlert(id) {
     Alert.alert(
-      "Excluir reserva",
-      `Tem certeza que deseja excluir? este processo é irreversível e será necessário reagendar em caso de arrependimento. Reserva ID: ${id}`,
+      'Excluir reserva',
+      'Tem certeza que deseja excluir? este processo é irreversível e será necessário reagendar em caso de arrependimento.',
       [
         {
-          text: "SIM",
-          onPress: () => excluirReserva(id),
+          text: "NÃO",
           style: "default"
         },
         {
-          text: "NÃO",
+          text: "SIM",
+          onPress: () => excluirReserva(id),
           style: "default"
         },
       ],
