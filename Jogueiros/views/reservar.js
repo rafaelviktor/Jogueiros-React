@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { PureComponent, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, TextInput } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInputMask } from 'react-native-masked-text';
 import Button from '../assets/components/button';
@@ -89,16 +90,18 @@ function Reservar({ route, navigation }) {
                   <View style={{marginTop: 20}}>
                     <Text style={styles.cardTitle}>Data da reserva</Text>
                     <Text style={styles.cardText}>Selecione para alterar</Text>
-                    <Button type='date' onpress={showDatepicker} title={moment(dataReserva).format("DD/MM/YYYY")} />
-                    {showData && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={dataReserva}
-                        mode='date'
-                        is24Hour={true}
-                        onChange={onChangeData}
-                      />
-                    )}
+                    <View style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center'}}>
+                      <Button type='date' onpress={showDatepicker} title={moment(dataReserva).format("DD/MM/YYYY")} />
+                      {showData && (
+                        <DateTimePicker
+                          testID="dateTimePicker"
+                          value={dataReserva}
+                          mode='date'
+                          is24Hour={true}
+                          onChange={onChangeData}
+                        />
+                      )}
+                    </View>
                   </View>
                   <View style={styles.hr} />
                   <View style={{marginTop: 20}}>
@@ -169,6 +172,26 @@ function Reservar({ route, navigation }) {
                     value={titular}
                     style={styles.input}
                     />
+                      <View style={styles.hr} />
+                      <Text style={styles.cardPaymentText}>Selecione o parcelamento</Text>
+                      <View
+                          style={{
+                          backgroundColor: '#EAEAEA',
+                          borderRadius: 10,
+                          marginBottom: 20
+                      }}>
+                      <Picker
+                        onValueChange={(itemValue) => setParcelas(itemValue)}
+                        selectedValue={parcelas}
+                      >
+                          <Picker.Item label='Preço à vista' value={1}/>
+                          <Picker.Item label='Em 2x sem juros' value={2}/>
+                          <Picker.Item label='Em 3x sem juros' value={3}/>
+                          <Picker.Item label='Em 4x sem juros' value={4}/>
+                          <Picker.Item label='Em 5x sem juros' value={5}/>
+                          <Picker.Item label='Em 6x sem juros' value={6}/>
+                      </Picker>
+                      </View>
                   </View>
                 </View>
               </View>
@@ -177,7 +200,7 @@ function Reservar({ route, navigation }) {
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardPrice}>{dadosAnuncio.preco} R$ /hora</Text>
-            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, vencimento: vencimento, cvv: cvv, titular: titular, bandeira: checarBandeira(numero.substring(0,2)) }})}/>
+            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, vencimento: vencimento, cvv: cvv, titular: titular, bandeira: checarBandeira(numero.substring(0,2)), parcelas: parcelas }})}/>
           </View>
         </View>
       </View>
@@ -258,6 +281,11 @@ const styles = StyleSheet.create({
   },
   cardText: {
     marginBottom: 15,
+    fontSize: 17
+  },
+  cardPaymentText: {
+    marginTop: 15,
+    marginBottom: 10,
     fontSize: 17
   },
   cardPrice: {
