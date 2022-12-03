@@ -23,7 +23,8 @@ function Home({ navigation }) {
         setAnunciosObj(response.data.result)
       }
     } catch (err) {
-      navigation.goBack();
+      setAnunciosObj([])
+      console.log(err)
     }
     setIsLoading(false)
   }
@@ -42,7 +43,8 @@ function Home({ navigation }) {
         setAnunciosObj(response.data.result)
       }
     } catch (err) {
-      navigation.goBack();
+      setAnunciosObj([])
+      console.log(err)
     }
     setIsLoading(false)
   }

@@ -22,6 +22,7 @@ function Populares({ navigation }) {
         setIsAuthenticated(true)
       }
     } catch (err) {
+      setAnunciosObj([])
       console.log(err)
     }
     setIsLoading(false)
