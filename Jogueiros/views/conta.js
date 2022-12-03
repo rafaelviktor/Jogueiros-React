@@ -55,8 +55,10 @@ function Perfil({ navigation }) {
           setIsAuthenticated(true)
         } else if(response?.data.success === false) {
           console.log(response.data)
+          alert(response.data.message)
         } else {
           console.log(response.data)
+          alert(response.data.message)
         }
     } catch (err) {
       alert(err.response.data.message)
