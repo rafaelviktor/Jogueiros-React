@@ -1,5 +1,5 @@
 import React, { PureComponent, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, TextInput, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TextInputMask } from 'react-native-masked-text';
@@ -64,7 +64,7 @@ function Reservar({ route, navigation }) {
   const [cvv, setcvv] = useState('');
   const [vencimento, setVencimento] = useState('');
   const [titular, setTitular] = useState('');
-  const [parcelas, setParcelas] = useState(0);
+  const [parcelas, setParcelas] = useState(1);
 
   // função de verificar a bandeira
   function checarBandeira(numeroCartao) {
@@ -80,6 +80,16 @@ function Reservar({ route, navigation }) {
       return 'Hiper'
     }
   }
+
+  const Continuar = () => {
+    if(!numero || !cvv || !vencimento || !titular) {
+      Alert.alert('Atenção','É necessário informar todos os dados de pagamento de sua reserva para poder continuar.')
+    } else if(numero.length === 19 && vencimento.length === 5 && cvv.length >= 3 && titular.length >= 5) {
+      navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, vencimento: vencimento, cvv: cvv, titular: titular, bandeira: checarBandeira(numero.substring(0,2)), parcelas: parcelas }})
+    } else {
+      Alert.alert('Atenção','Um ou mais campos de pagamento não foram preenchidos corretamente.')
+    }
+  };
 
     return (
       <View style={styles.root}>
@@ -200,7 +210,7 @@ function Reservar({ route, navigation }) {
         <View style={styles.footer}>
           <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardPrice}>{dadosAnuncio.preco} R$ /hora</Text>
-            <Button type='mini' title='Continuar' onpress={() => navigation.navigate('Confirmar e pagar', { anuncio: route.params.dadosAnuncio, reserva: {data: dataReserva.toJSON(), inicio: horaInicio.toJSON(), final: horaFinal.toJSON() }, cartao: { numero: numero, vencimento: vencimento, cvv: cvv, titular: titular, bandeira: checarBandeira(numero.substring(0,2)), parcelas: parcelas }})}/>
+            <Button type='mini' title='Continuar' onpress={() => Continuar()}/>
           </View>
         </View>
       </View>

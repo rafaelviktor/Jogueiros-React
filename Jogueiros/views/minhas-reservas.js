@@ -95,6 +95,7 @@ function MinhasReservas({ navigation }) {
                     <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                       <Text style={styles.textNormal}>{anuncio[index].titulo} | R$ {anuncio[index].preco},00 /h</Text>
                       <Text style={styles.textNormal}>Data: {item.data_reserva} | Início: {item.hora_inicio} - Final: {item.hora_final}</Text>
+                      <Text style={styles.textNormal}>Endereço: {anuncio[index].logradouro}{anuncio[index].numero ? ", "+anuncio[index].numero : ""}</Text>
                       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
                         <Text style={styles.textMuted}>Data de criação: {item.data_inclusao}</Text>
                         <TouchableNativeFeedback background={TouchableNativeFeedback.Ripple('#f75c5c', true, 26)} onPress={() => showAlert(item._id)}>

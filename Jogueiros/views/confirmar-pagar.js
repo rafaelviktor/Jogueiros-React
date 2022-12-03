@@ -21,7 +21,7 @@ function ConfirmarReserva({ route, navigation }) {
         "numero":  "6224 4337 8365 1111",
         "cvv": "601",
         "vencimento": "12/28",
-        "titular": "Marcelo",
+        "titular": "Marcelo Uchôa",
         "bandeira": "Hiper"
     },
     {
